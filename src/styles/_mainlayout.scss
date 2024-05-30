@@ -1,0 +1,28 @@
+@use "./config" as *;
+
+#main_layout {
+  position: relative;
+  width: 100%;
+  height: 100vh;
+
+  .bg {
+    @include overlayPos(absolute);
+
+    img,
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      display: block;
+      pointer-events: none;
+    }
+
+    .img_wrapper {
+      @include overlayPos(absolute);
+
+      &.hide {
+        display: none;
+      }
+    }
+  }
+}

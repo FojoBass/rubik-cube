@@ -1,0 +1,51 @@
+@import url("https://fonts.googleapis.com/css2?family=Freckle+Face&family=VT323&display=swap");
+
+$trans_fast: 0.1s;
+$trans_mid: 0.3s;
+$trans_slow: 0.5s;
+$fnt_main: "VT323", monospace;
+$fnt_spc: "Freckle Face", system-ui;
+$clr_white: #fff;
+$clr_yellow: #ffd700;
+$clr_blue: #0000ff;
+$clr_green: #008000;
+$clr_red: #ff0000;
+$clr_orange: #ffa500;
+
+@mixin biTranslate($x_val, $y_val) {
+  transform: translate($x_val, $y_val);
+}
+
+@mixin uniTranslate($axis, $val) {
+  transform: translate#{$axis }($val);
+}
+
+@mixin media($unit, $val) {
+  @media screen and (#{$unit}-width: $val) {
+    @content;
+  }
+}
+
+@mixin mediaRange($unit1, $val1, $unit2, $val2) {
+  @media screen and (#{$unit1}-width: $val1) and (#{$unit2}-width: $val2) {
+    @content;
+  }
+}
+
+@mixin position($type, $x, $y, $x_val, $y_val) {
+  position: $type;
+  #{$x}: $x_val;
+  #{$y}: $y_val;
+}
+
+@mixin overlayPos($pos) {
+  position: $pos;
+  inset: 0;
+}
+
+@mixin flex($justify: flex-start, $align: flex-start, $dir: row) {
+  display: flex;
+  justify-content: $justify;
+  align-items: $align;
+  flex-direction: $dir;
+}

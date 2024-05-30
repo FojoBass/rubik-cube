@@ -1,0 +1,37 @@
+@use "./config" as *;
+
+#home {
+  @include flex(center, center);
+
+  .wrapper {
+    backdrop-filter: blur(10px);
+    @include flex(center, stretch, column);
+    border-radius: 2rem;
+    overflow: hidden;
+
+    .opt_btn {
+      font-size: 3rem;
+      text-transform: capitalize;
+      color: #fff;
+      letter-spacing: 0.1rem;
+      opacity: 0.7;
+      background: linear-gradient(
+        to right,
+        $clr_blue,
+        $clr_green,
+        $clr_orange,
+        $clr_red,
+        $clr_white,
+        $clr_yellow
+      );
+      padding: 3rem 5rem;
+      border-radius: 1rem;
+      background-clip: text;
+      transition: all ease $trans_mid;
+
+      &:hover {
+        color: transparent;
+      }
+    }
+  }
+}

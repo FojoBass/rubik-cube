@@ -1,5 +1,37 @@
+@use "./config" as *;
 * {
   padding: 0;
   margin: 0;
   box-sizing: border-box;
+  // cursor: url("../assets/rubik-cursor.webp"), auto;
+  font-size: 1rem;
+  font-family: $fnt_main;
+}
+
+:root {
+  font-size: 10px;
+}
+
+button {
+  border: none;
+  outline: none;
+  background: transparent;
+  color: inherit;
+  cursor: pointer;
+}
+
+.center_sect {
+  width: 500px;
+  opacity: 0;
+  scale: 0.5;
+  transition: all ease $trans_mid;
+  height: 100%;
+  @include position(absolute, left, top, 50%, 0);
+  @include uniTranslate(X, -50%);
+
+  &.active {
+    opacity: 1;
+    scale: 1;
+    z-index: 10;
+  }
 }
