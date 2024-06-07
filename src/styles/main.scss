@@ -1,4 +1,98 @@
-@use "./config";
+@use "./config" as *;
 @use "./defaults";
 @use "./mainlayout";
 @use "./home";
+@use "./modal_layout";
+@use "./maingame";
+
+.sml_cubes_wrapper {
+  @include overlayPos(fixed);
+  perspective: 1000px;
+  transform-style: preserve-3d;
+
+  .sml_cube {
+    --cubeWidth: 10px;
+    position: absolute;
+    top: 200px;
+    left: 100px;
+    width: var(--cubeWidth);
+    aspect-ratio: 1/1;
+    transform-style: preserve-3d;
+    animation: cubeRotate 3s linear infinite;
+
+    .sml_cube_sides {
+      @include overlayPos(absolute);
+      display: grid;
+      grid-template-columns: 1fr 1fr 1fr;
+      gap: 0.5px;
+
+      &.face {
+        transform: translateZ(calc(var(--cubeWidth) / 2));
+      }
+
+      &.back {
+        transform: rotateY(180deg) translateZ(calc(var(--cubeWidth) / 2));
+      }
+
+      &.top {
+        transform: rotateX(90deg) translateZ(calc(var(--cubeWidth) / 2));
+      }
+
+      &.bottom {
+        transform: rotateX(-90deg) translateZ(calc(var(--cubeWidth) / 2));
+      }
+
+      &.right {
+        transform: rotateY(90deg) translateZ(calc(var(--cubeWidth) / 2));
+      }
+
+      &.left {
+        transform: rotateY(-90deg) translateZ(calc(var(--cubeWidth) / 2));
+      }
+
+      .clr_box {
+        animation: clrBoxAnim 2s linear infinite;
+      }
+    }
+  }
+}
+
+.media_loading {
+  @include overlayPos(absolute);
+  @include flex(center, center);
+  background-color: #000b1d;
+  z-index: 1;
+  pointer-events: none;
+
+  svg {
+    font-size: 1.5rem;
+    animation: spinAnim 1s linear infinite;
+  }
+}
+
+@keyframes cubeRotate {
+  from {
+    transform: rotateX(0deg) rotateY(0deg);
+  }
+  to {
+    transform: rotateX(360deg) rotateY(360deg);
+  }
+}
+
+@keyframes clrBoxAnim {
+  from {
+    filter: hue-rotate(0deg);
+  }
+  to {
+    filter: hue-rotate(360deg);
+  }
+}
+
+@keyframes spinAnim {
+  from {
+    rotate: 0deg;
+  }
+  to {
+    rotate: 360deg;
+  }
+}

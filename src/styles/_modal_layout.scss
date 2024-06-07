@@ -1,0 +1,164 @@
+@use "./config" as *;
+
+#modal_layout {
+  @include overlayPos(fixed);
+  background-color: #00000076;
+  z-index: -2;
+  opacity: 0;
+  transition: opacity ease-in-out $trans_slow;
+  @include flex(center, center);
+  backdrop-filter: blur(10px);
+
+  &.active {
+    z-index: 1000;
+    opacity: 1;
+  }
+
+  .center {
+    background-color: #00173fa4;
+    width: 350px;
+    padding: 30px;
+    border-radius: 20px;
+  }
+}
+
+// *Start Game
+.start_game {
+  img {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+
+  form {
+    width: 100%;
+    @include flex();
+    flex-direction: column;
+    position: relative;
+    color: $clr_fnt;
+    gap: 20px;
+
+    .close_btn {
+      @include position(absolute, right, top, -20px, -20px);
+      padding: 5px;
+
+      &:active {
+        scale: 0.9;
+      }
+
+      svg {
+        width: 2rem;
+        height: 2rem;
+        pointer-events: none;
+      }
+    }
+
+    .form_opt {
+      width: 100%;
+
+      &:nth-of-type(even) {
+        text-align: right;
+
+        input {
+          text-align: right;
+        }
+      }
+
+      input {
+        width: 70%;
+        font-size: 2rem;
+        letter-spacing: 0.1rem;
+        border: 1px solid #ffffffa4;
+        border-radius: 10px;
+        padding: 10px;
+      }
+
+      .note {
+        font-size: 1.3rem;
+        margin-top: 10px;
+        padding-left: 10px;
+        color: #fd7878;
+        text-transform: uppercase;
+      }
+    }
+
+    .avatar_wrapper {
+      @include flex();
+      flex-direction: column;
+      gap: 10px;
+      width: 100%;
+
+      label {
+        font-size: 1.8rem;
+      }
+
+      .avis {
+        @include flex(space-evenly, center);
+        width: 100%;
+
+        .img_btn {
+          aspect-ratio: 1/1;
+          width: 20%;
+          border-radius: 10px;
+          overflow: hidden;
+          transition: all ease $trans_fast;
+          border: 1px solid transparent;
+          padding: 2px;
+          position: relative;
+
+          &:hover {
+            scale: 1.1;
+          }
+
+          &.selected {
+            border-color: #87ceeb;
+          }
+
+          img {
+            pointer-events: none;
+            border-radius: 10px;
+          }
+        }
+      }
+    }
+
+    .start_btn {
+      margin-inline: auto;
+      font-size: 1.8rem;
+      letter-spacing: 0.1rem;
+      box-shadow: 2px 2px 5px #000714, -2px -2px 5px #003083b5;
+      padding: 5px 20px;
+      border-radius: 5px;
+      background: linear-gradient(120deg, #003083b5, #000714);
+      font-family: $fnt_spc;
+      margin-top: 10px;
+
+      &:disabled {
+        cursor: not-allowed;
+        opacity: 0.5;
+      }
+
+      &:not(&:disabled):active {
+        background: linear-gradient(-120deg, #003083b5, #000714);
+        box-shadow: inset 2px 2px 5px #000714, inset -2px -2px 5px #003083b5;
+      }
+    }
+
+    .err_msg {
+      text-align: center;
+      width: 100%;
+      font-size: 1.6rem;
+      color: #ff0000;
+      font-weight: bold;
+      opacity: 0;
+      scale: 0.5;
+      transition: all ease $trans_mid;
+
+      &.active {
+        opacity: 1;
+        scale: 1;
+      }
+    }
+  }
+}
+// *End Start Game

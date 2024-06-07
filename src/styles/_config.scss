@@ -11,6 +11,7 @@ $clr_blue: #0000ff;
 $clr_green: #008000;
 $clr_red: #ff0000;
 $clr_orange: #ffa500;
+$clr_fnt: #fff;
 
 @mixin biTranslate($x_val, $y_val) {
   transform: translate($x_val, $y_val);
