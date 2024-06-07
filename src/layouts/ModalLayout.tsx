@@ -1,4 +1,4 @@
-import { useNavigate } from "react-router-dom";
+import { useLocation, useNavigate } from "react-router-dom";
 import { useCubeContext } from "../contexts/cubeContext";
 import StartGame from "../modals/StartGame";
 import { ModalKeys } from "../types";
@@ -8,6 +8,7 @@ const ModalLayout = () => {
   const { openModal, setOpenModal, isNew, isContinue } = useCubeContext();
   const { playerInfo } = useCubeSelector((state) => state.cube);
   const navigate = useNavigate();
+  const { pathname } = useLocation();
 
   return (
     <section
@@ -16,7 +17,9 @@ const ModalLayout = () => {
       onClick={(e) => {
         if (e.target === e.currentTarget && setOpenModal) {
           setOpenModal((prev) => ({ ...prev, state: false }));
-          (isNew || isContinue) && !playerInfo && navigate("/");
+          (isNew || isContinue || pathname.includes("/g/")) &&
+            !playerInfo &&
+            navigate("/");
         }
       }}
     >

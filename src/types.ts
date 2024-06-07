@@ -39,4 +39,5 @@ export interface GameInfoInt {
   moves: number;
   uid: string;
   isDone: boolean;
+  // !Save the angle of rotationf for all cubes
 }

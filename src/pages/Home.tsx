@@ -1,4 +1,4 @@
-import { MouseEventHandler, useEffect } from "react";
+import { useEffect } from "react";
 import { useCubeContext } from "../contexts/cubeContext";
 import SectionTemplate from "../templates/SectionTemplate";
 import { Section, SoundIds } from "../types";

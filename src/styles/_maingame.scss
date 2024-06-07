@@ -78,8 +78,8 @@
         opacity: 1;
       }
 
-      @include media(max, 400px) {
-        --cube_width: 85%;
+      @include media(max, 500px) {
+        --cube_width: 60vw;
       }
 
       .box {
@@ -87,7 +87,7 @@
         background-color: #fff;
         width: 100%;
         @include flex(center, center);
-        color: brown;
+        color: #000;
         outline: 1px solid #000c21;
         z-index: 1;
         border-radius: 5px;
@@ -99,6 +99,8 @@
           width: 90%;
           aspect-ratio: 1/1;
           z-index: -1;
+          background-color: var(--box_clr);
+          border-radius: 3px;
         }
       }
     }
@@ -107,15 +109,13 @@
       transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg);
       // transition: all ease 3s;
       transform-style: preserve-3d;
-      animation: verAnim 10s ease infinite;
-      // display: none;
+      // animation: verAnim 10s ease infinite;
 
       &:before,
       &:after {
         content: "";
         @include overlayPos(absolute);
         transform-style: preserve-3d;
-        // display: none;
       }
 
       &::before {
@@ -146,8 +146,7 @@
 
         &.right_cube {
           right: 0;
-          transform: rotateX(45deg);
-          animation: verRotateAnim 5s ease-in-out infinite;
+          // animation: verRotateAnim 5s ease-in-out infinite;
 
           &:before {
             content: "";
@@ -171,8 +170,7 @@
 
         &.left_cube {
           left: 0;
-          transform: rotateX(45deg);
-          animation: verRotateAnim 3s ease-in-out 0.5s infinite;
+          // animation: verRotateAnim 3s ease-in-out 0.5s infinite;
 
           &:before {
             content: "";
@@ -255,10 +253,10 @@
     }
 
     .hor_cube {
-      transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-50deg);
+      transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg);
       // transition: all ease 3s;
       transform-style: preserve-3d;
-      animation: horAnim 10s linear infinite;
+      // animation: horAnim 10s linear infinite;
 
       .sub_cube {
         width: 100%;
@@ -270,8 +268,8 @@
 
         &.top_cube {
           top: 0;
-          transform: rotateY(45deg);
-          animation: horRotateAnim 3s linear infinite;
+
+          // animation: horRotateAnim 3s linear infinite;
 
           &:before {
             content: "";
@@ -291,7 +289,6 @@
         &.mid_cube {
           top: 50%;
           @include uniTranslate(Y, -50%);
-          // display: none;
 
           &:after,
           &:before {
@@ -323,8 +320,7 @@
 
         &.bottom_cube {
           bottom: 0;
-          transform: rotateY(45deg);
-          animation: horRotateAnim 5s linear 0.5s infinite;
+          // animation: horRotateAnim 5s linear 0.5s infinite;
 
           &:before {
             content: "";
