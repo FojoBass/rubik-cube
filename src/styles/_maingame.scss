@@ -18,6 +18,20 @@
     object-fit: cover;
   }
 
+  .loading_wrapper {
+    @include overlayPos(fixed);
+    z-index: -1;
+    backdrop-filter: blur(20px);
+    @include flex(center, center);
+    opacity: 0;
+    transition: all ease $trans_mid;
+
+    &.active {
+      opacity: 1;
+      z-index: 1;
+    }
+  }
+
   .navsect {
     @include flex(space-between, center, row-reverse);
     padding-block: 10px;
@@ -47,6 +61,7 @@
         width: 30px;
         border-radius: 50%;
         overflow: hidden;
+        position: relative;
 
         @include media(max, 400px) {
           width: 25px;
@@ -60,6 +75,10 @@
     height: calc(100vh - 54px);
     perspective: 10000px;
     transform-style: preserve-3d;
+
+    &.hide {
+      visibility: hidden;
+    }
 
     @include media(max, 400px) {
       height: calc(100vh - 48.2px);

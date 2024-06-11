@@ -28,6 +28,8 @@ interface CubeContextInt {
   setIsNew?: Dispatch<SetStateAction<boolean>>;
   isContinue?: boolean;
   setIsContinue?: Dispatch<SetStateAction<boolean>>;
+  isFormEntry?: boolean;
+  setIsFormEntry?: Dispatch<SetStateAction<boolean>>;
 }
 
 const CubeContext = createContext<CubeContextInt>({});
@@ -36,7 +38,7 @@ const isChrome = navigator.userAgent.toLowerCase().includes("chrome");
 
 export const CubeProvider = ({ children }: { children: ReactNode }) => {
   const musicRefs = useRef<HTMLAudioElement[]>([]);
-  const [isMute, setIsMute] = useState(false);
+  const [isMute, setIsMute] = useState(true);
   const [openModal, setOpenModal] = useState<{
     state: boolean;
     key: ModalKeys | "";
@@ -45,6 +47,7 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
   const [sfxVol, setSfxVol] = useState(50);
   const [isNew, setIsNew] = useState<boolean>(false);
   const [isContinue, setIsContinue] = useState<boolean>(false);
+  const [isFormEntry, setIsFormEntry] = useState<boolean>(false);
 
   useEffect(() => {
     const musicEls = musicRefs.current;
@@ -72,6 +75,8 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
     setIsNew,
     isContinue,
     setIsContinue,
+    isFormEntry,
+    setIsFormEntry,
   };
 
   return (

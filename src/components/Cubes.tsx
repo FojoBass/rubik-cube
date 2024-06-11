@@ -17,7 +17,7 @@ const Cubes = () => {
 
 export default Cubes;
 
-const Cube = () => {
+export const Cube = () => {
   const boxRef = useRef<HTMLSpanElement[]>([]);
   const colors: string[] = [
     "white",

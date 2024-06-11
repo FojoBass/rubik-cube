@@ -11,7 +11,7 @@ const uid = new ShortUniqueId({ length: 6 });
 
 const homeOpt: { title: string; path: string }[] = [
   { title: "new", path: `/g/${uid.randomUUID()}` },
-  { title: "continue", path: "/g/123asd" },
+  { title: "continue", path: "/g/nil" },
   { title: "hall of fame", path: "/halloffame" },
   { title: "scores", path: "/scores" },
   { title: "settings", path: "/settings" },

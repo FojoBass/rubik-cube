@@ -24,6 +24,11 @@ export enum ModalKeys {
   start = "startgame",
 }
 
+export interface CubeInt {
+  position: string;
+  color: string;
+}
+
 export interface PlayerInfoInt {
   uid: string;
   name: string;
@@ -39,5 +44,9 @@ export interface GameInfoInt {
   moves: number;
   uid: string;
   isDone: boolean;
-  // !Save the angle of rotationf for all cubes
+  cubes: {
+    left: CubeInt[];
+    right: CubeInt[];
+    center: CubeInt[];
+  };
 }

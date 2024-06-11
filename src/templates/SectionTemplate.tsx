@@ -1,6 +1,5 @@
 import { FC, ReactNode } from "react";
 import { Section } from "../types";
-import { useCubeContext } from "../contexts/cubeContext";
 
 interface SectionTemplateInt {
   children: ReactNode;
@@ -8,13 +7,8 @@ interface SectionTemplateInt {
 }
 
 const SectionTemplate: FC<SectionTemplateInt> = ({ children, id }) => {
-  const { currentSection } = useCubeContext();
-
   return (
-    <section
-      id={id}
-      className={`center_sect ${currentSection === id ? "active" : ""}`}
-    >
+    <section id={id} className="center_sect">
       {children}
     </section>
   );

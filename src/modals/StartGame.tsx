@@ -27,8 +27,14 @@ const StartGame = () => {
   const [aviUrl, setAviUrl] = useState("");
   const aviRefs = useRef<HTMLButtonElement[]>([]);
   const { playSfx } = useSfx();
-  const { setOpenModal, isNew, isContinue, setIsContinue, setIsNew } =
-    useCubeContext();
+  const {
+    setOpenModal,
+    isNew,
+    isContinue,
+    setIsContinue,
+    setIsNew,
+    setIsFormEntry,
+  } = useCubeContext();
   const navigate = useNavigate();
   const { id } = useParams();
   const isDisabled = useMemo<boolean>(() => {
@@ -91,6 +97,7 @@ const StartGame = () => {
       setOpenModal && setOpenModal((prev) => ({ ...prev, state: false }));
       setIsNew && setIsNew(false);
       setIsContinue && setIsContinue(false);
+      setIsFormEntry && setIsFormEntry(true);
       dispatch(resetCreateSuccess());
     }
     if (isCreateFailed) {
