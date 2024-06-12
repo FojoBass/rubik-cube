@@ -17,15 +17,6 @@ export const createPlayer = createAsyncThunk<
       avi: payload.aviUrl,
       createdAt: serverTimestamp(),
     };
-    // const gameInfo: GameInfoInt = {
-    //   duration: 0,
-    //   id: uid.randomUUID(),
-    //   moves: 0,
-    //   startedAt: serverTimestamp(),
-    //   uid: payload.uid,
-    //   isDone: false,
-    //   updatedAt: serverTimestamp(),
-    // };
     await cubeServices.createPlayer(playerInfo);
 
     return { playerInfo };
@@ -97,14 +88,22 @@ export const getPlayer = createAsyncThunk<PlayerInfoInt, { uid: string }>(
 
       let playerInfo = res.data();
 
+      if (!playerInfo) {
+        throw new Error("No player info");
+      }
+
       return {
         ...playerInfo,
         createdAt: playerInfo?.startedAt
           ? playerInfo.startedAt.toDate().toString()
           : "",
       } as PlayerInfoInt;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
+    } catch (err: any) {
+      return thunkApi.rejectWithValue({
+        message: err.message,
+        stack: err.stack,
+        name: err.name,
+      });
     }
   }
 );

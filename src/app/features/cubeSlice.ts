@@ -13,8 +13,8 @@ interface InitialStateInt {
   loading: boolean;
   gameInfo: GameInfoInt | null;
   error: any;
-  isCreateSuccess: boolean;
-  isCreateFailed: boolean;
+  isInitializeSuccess: boolean;
+  isInitializeFailed: boolean;
   saving: boolean;
   savingSuccess: boolean;
   savingFailed: boolean;
@@ -31,8 +31,8 @@ const initialState: InitialStateInt = {
   loading: false,
   gameInfo: null,
   error: null,
-  isCreateFailed: false,
-  isCreateSuccess: false,
+  isInitializeFailed: false,
+  isInitializeSuccess: false,
   saving: false,
   savingSuccess: false,
   savingFailed: false,
@@ -48,11 +48,11 @@ export const cubeSlice = createSlice({
   name: "cube",
   initialState,
   reducers: {
-    resetCreateFailed(state) {
-      state.isCreateFailed = false;
+    resetInitializedFailed(state) {
+      state.isInitializeFailed = false;
     },
-    resetCreateSuccess(state) {
-      state.isCreateSuccess = false;
+    resetInitializedSuccess(state) {
+      state.isInitializeSuccess = false;
     },
     resetFetchingPlayerFailed(state) {
       state.fetchingPlayerFailed = false;
@@ -82,11 +82,11 @@ export const cubeSlice = createSlice({
       .addCase(createPlayer.fulfilled, (state, action) => {
         state.loading = false;
         state.playerInfo = { ...action.payload.playerInfo, createdAt: "" };
-        state.isCreateSuccess = true;
+        state.isInitializeSuccess = true;
       })
       .addCase(createPlayer.rejected, (state, error) => {
         state.loading = false;
-        state.isCreateFailed = true;
+        state.isInitializeFailed = true;
         state.error = error;
       });
 
@@ -147,6 +147,7 @@ export const cubeSlice = createSlice({
     builder
       .addCase(getPlayer.pending, (state) => {
         state.fetchingPlayer = true;
+        state.loading = true;
       })
       .addCase(
         getPlayer.fulfilled,
@@ -154,12 +155,16 @@ export const cubeSlice = createSlice({
           state.fetchingPlayer = false;
           state.playerInfo = action.payload;
           state.fetchingPlayerSuccess = true;
+          state.loading = false;
+          state.isInitializeSuccess = true;
         }
       )
       .addCase(getPlayer.rejected, (state, error) => {
         state.fetchingPlayer = false;
         state.error = error;
         state.fetchingPlayerFailed = true;
+        state.loading = false;
+        state.isInitializeFailed = true;
       });
   },
 });

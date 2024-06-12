@@ -38,7 +38,7 @@ const isChrome = navigator.userAgent.toLowerCase().includes("chrome");
 
 export const CubeProvider = ({ children }: { children: ReactNode }) => {
   const musicRefs = useRef<HTMLAudioElement[]>([]);
-  const [isMute, setIsMute] = useState(true);
+  const [isMute, setIsMute] = useState(false);
   const [openModal, setOpenModal] = useState<{
     state: boolean;
     key: ModalKeys | "";

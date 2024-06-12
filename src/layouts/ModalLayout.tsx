@@ -5,7 +5,14 @@ import { ModalKeys } from "../types";
 import { useCubeSelector } from "../app/store";
 
 const ModalLayout = () => {
-  const { openModal, setOpenModal, isNew, isContinue } = useCubeContext();
+  const {
+    openModal,
+    setOpenModal,
+    isNew,
+    isContinue,
+    setIsContinue,
+    setIsNew,
+  } = useCubeContext();
   const { playerInfo } = useCubeSelector((state) => state.cube);
   const navigate = useNavigate();
   const { pathname } = useLocation();
@@ -17,6 +24,8 @@ const ModalLayout = () => {
       onClick={(e) => {
         if (e.target === e.currentTarget && setOpenModal) {
           setOpenModal((prev) => ({ ...prev, state: false }));
+          setIsNew && setIsNew(false);
+          setIsContinue && setIsContinue(false);
           (isNew || isContinue || pathname.includes("/g/")) &&
             !playerInfo &&
             navigate("/");

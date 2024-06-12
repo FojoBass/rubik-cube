@@ -19,7 +19,7 @@ import useSfx from "../hooks/useSfx";
 import { useCubeContext } from "../contexts/cubeContext";
 import { useNavigate, useParams } from "react-router-dom";
 import { useCubeDispatch, useCubeSelector } from "../app/store";
-import { createPlayer } from "../app/features/cubeAsyncThunk";
+import { createPlayer, getPlayer } from "../app/features/cubeAsyncThunk";
 import { cubeSlice } from "../app/features/cubeSlice";
 
 const StartGame = () => {
@@ -37,22 +37,35 @@ const StartGame = () => {
   } = useCubeContext();
   const navigate = useNavigate();
   const { id } = useParams();
+  const [playerId, setPlayerId] = useState("");
   const isDisabled = useMemo<boolean>(() => {
-    return Boolean(id && playerName.length > 2 && aviUrl);
-  }, [id, playerName, aviUrl]);
+    return Boolean(
+      (id && playerName.length > 2 && aviUrl) || playerId.length > 5
+    );
+  }, [id, playerName, aviUrl, playerId]);
   const dispatch = useCubeDispatch();
-  const { isCreateFailed, isCreateSuccess, error, loading } = useCubeSelector(
-    (state) => state.cube
-  );
-  const { resetCreateFailed, resetCreateSuccess } = cubeSlice.actions;
+  const { isInitializeFailed, isInitializeSuccess, error, loading } =
+    useCubeSelector((state) => state.cube);
+  const { resetInitializedFailed, resetInitializedSuccess } = cubeSlice.actions;
   const [errMsg, setErrMsg] = useState("");
   const errRef = useRef<HTMLParagraphElement | null>(null);
+
+  const resetFields = () => {
+    setAviUrl("");
+    setPlayerName("");
+    setPlayerId("");
+  };
 
   const handleSubmit: FormEventHandler = (e) => {
     e.preventDefault();
 
-    if (playerName.length > 2 && aviUrl) {
+    if (isNew && playerName.length > 2 && aviUrl) {
       dispatch(createPlayer({ uid: id ?? "", aviUrl, playerName }));
+      resetFields();
+    }
+
+    if (isContinue && playerId.length > 5) {
+      dispatch(getPlayer({ uid: playerId }));
     }
   };
 
@@ -68,8 +81,11 @@ const StartGame = () => {
     setAviUrl(src);
   };
 
-  const handleKeyDown: KeyboardEventHandler = (e) => {
-    const isLetter = /^[a-zA-Z]$/.test(e.key) || e.key === "Backspace";
+  const handleKeyDownSfx: KeyboardEventHandler = (e) => {
+    const isLetter =
+      (isContinue
+        ? /^[a-zA-Z0-9]$/.test(e.key)
+        : isNew && /^[a-zA-Z]$/.test(e.key)) || e.key === "Backspace";
     if (isLetter) playSfx(keyboardSfx);
   };
 
@@ -93,19 +109,30 @@ const StartGame = () => {
   }, [errMsg]);
 
   useEffect(() => {
-    if (isCreateSuccess) {
+    if (isInitializeSuccess) {
       setOpenModal && setOpenModal((prev) => ({ ...prev, state: false }));
+      isNew && setIsFormEntry && setIsFormEntry(true);
       setIsNew && setIsNew(false);
       setIsContinue && setIsContinue(false);
-      setIsFormEntry && setIsFormEntry(true);
-      dispatch(resetCreateSuccess());
+      isContinue && navigate(`/g/${playerId}`);
+      resetFields();
+      dispatch(resetInitializedSuccess());
     }
-    if (isCreateFailed) {
-      console.log(error);
-      setErrMsg("initialization failed! Try again");
-      dispatch(resetCreateFailed());
+    if (isInitializeFailed) {
+      console.error(error);
+      if (error.payload.message.includes("player info"))
+        setErrMsg("Invalid Player id");
+      else setErrMsg("initialization failed! Try again");
+      dispatch(resetInitializedFailed());
     }
-  }, [isCreateFailed, isCreateSuccess]);
+  }, [
+    isInitializeFailed,
+    isInitializeSuccess,
+    isNew,
+    isContinue,
+    playerId,
+    error,
+  ]);
 
   return (
     <div className="start_game">
@@ -140,7 +167,7 @@ const StartGame = () => {
 
                   isLetter && setPlayerName(e.target.value);
                 }}
-                onKeyDown={handleKeyDown}
+                onKeyDown={handleKeyDownSfx}
               />
             </div>
 
@@ -156,7 +183,22 @@ const StartGame = () => {
             </div>
           </>
         ) : (
-          isContinue && <>Form for continue</>
+          isContinue && (
+            <>
+              <div className="form_opt">
+                <input
+                  type="text"
+                  placeholder="Player id"
+                  value={playerId}
+                  onChange={(e) => {
+                    !e.target.value.includes(" ") &&
+                      setPlayerId(e.target.value);
+                  }}
+                  onKeyDown={handleKeyDownSfx}
+                />
+              </div>
+            </>
+          )
         )}
 
         <button

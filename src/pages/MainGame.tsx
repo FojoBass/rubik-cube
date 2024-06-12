@@ -7,7 +7,7 @@ import { AiOutlineUndo } from "react-icons/ai";
 import { FaRegSave } from "react-icons/fa";
 import Lazyload from "../components/Lazyload";
 import { IoPauseOutline } from "react-icons/io5";
-import { genRandomNum } from "../helpers";
+import { formatDuration, genRandomNum } from "../helpers";
 import ShortUniqueId from "short-unique-id";
 import { serverTimestamp } from "firebase/firestore";
 import { cubeSlice } from "../app/features/cubeSlice";
@@ -18,6 +18,9 @@ import {
   updateGame,
 } from "../app/features/cubeAsyncThunk";
 import { useLocation } from "react-router-dom";
+
+// todo setup isChrome functionality for firstEntry
+// *For testing purposes, we will show position
 
 enum CubeEnum {
   r = "right",
@@ -43,8 +46,15 @@ const MainGame = () => {
     fetchingPlayerSuccess,
     gameInfo,
   } = useCubeSelector((state) => state.cube);
-  const { musicRefs, isChrome, isNew, isContinue, isFormEntry } =
-    useCubeContext();
+  const {
+    musicRefs,
+    isChrome,
+    isNew,
+    isContinue,
+    isFormEntry,
+    setIsContinue,
+    setIsFormEntry,
+  } = useCubeContext();
   const rightCubeRef = useRef<HTMLDivElement | null>(null);
   const leftCubeRef = useRef<HTMLDivElement | null>(null);
   const centerCubeRef = useRef<HTMLDivElement | null>(null);
@@ -81,10 +91,15 @@ const MainGame = () => {
     resetFetchingGameSuccess,
     resetFetchingPlayerFailed,
     resetFetchingPlayerSuccess,
+    resetInitializedFailed,
+    resetInitializedSuccess,
   } = cubeSlice.actions;
   const { pathname } = useLocation();
   const [gameLoading, setGameLoading] = useState(true);
   const [isLoadingFailed, setIsLoadingFailed] = useState(false);
+  const [isReload, setIsReload] = useState(false);
+  const [isPlay, setIsPlay] = useState(false);
+  const [modDuration, setModDuration] = useState("");
 
   const colorSetter = (
     els: HTMLElement[],
@@ -221,7 +236,6 @@ const MainGame = () => {
       throw new Error(`No el found for the position ${position} : ${cubeEls}`);
   };
 
-  // todo prepare the cubes for saving
   const prepCubes = (cube: CubeEnum): CubeInt[] => {
     const leftCubeEls = leftBoxesRef.current;
     const centerCubeEls = centerBoxesRef.current;
@@ -319,6 +333,7 @@ const MainGame = () => {
 
         dispatch(createGame(gameInfo));
         setGameLoading(false);
+        setIsPlay(true);
       } else {
         const updateInfo: Omit<GameInfoInt, "startedAt" | "isDone"> = {
           duration: durationRef.current,
@@ -1063,8 +1078,32 @@ const MainGame = () => {
     });
   };
 
-  // todo setup isChrome functionality for firstEntry
-  // *For testing purposes, we will show position
+  // ? This is for reloads
+  const setColor = (els: HTMLElement[], cube: CubeInt[]) => {
+    cube.forEach((cb) => {
+      const el = els.find((e) => e.dataset.position === cb.position);
+      if (el) {
+        el.style.setProperty("--box_clr", cb.color);
+      } else {
+        console.error(
+          `This position ${cb.position} was not found in any element ${els} `
+        );
+      }
+    });
+  };
+
+  const gameTimer = (start: boolean = true) => {
+    const timer = setInterval(() => {
+      if (!start) clearInterval(timer);
+      durationRef.current = durationRef.current + 1;
+      setModDuration(formatDuration(durationRef.current));
+    }, 1000);
+  };
+
+  useEffect(() => {
+    if (!isContinue && pathname.includes("/nil"))
+      setIsContinue && setIsContinue(true);
+  }, [isContinue]);
 
   // ?Stop menu music
   useEffect(() => {
@@ -1102,8 +1141,6 @@ const MainGame = () => {
       const rightEls = rightsRef.current;
       const leftEls = leftsRef.current;
 
-      // setGameLoading(true);
-
       if (
         faceEls.length &&
         backEls.length &&
@@ -1125,6 +1162,8 @@ const MainGame = () => {
           setIsClrsSet(true);
         })();
       }
+
+      setIsFormEntry && setIsFormEntry(false);
     }
   }, [playerInfo, isFormEntry, isNew, isContinue]);
 
@@ -1182,7 +1221,7 @@ const MainGame = () => {
   // ? Get Player info on reload
   useEffect(() => {
     if (!pathname.includes("/nil") && !isNew && !isContinue) {
-      setGameLoading(true);
+      setIsReload(true);
       dispatch(getPlayer({ uid: pathname.split("/")[2] }));
     }
   }, [pathname]);
@@ -1192,11 +1231,15 @@ const MainGame = () => {
     if (fetchingPlayerSuccess && playerInfo) {
       dispatch(getGameInfo({ uid: playerInfo.uid }));
       dispatch(resetFetchingPlayerSuccess());
+      dispatch(resetInitializedSuccess());
+      setIsLoadingFailed(false);
     }
     if (fetchingPlayerFailed) {
       setGameLoading(false);
       setIsLoadingFailed(true);
       dispatch(resetFetchingPlayerFailed());
+      dispatch(resetInitializedFailed());
+
       console.error(error);
     }
   }, [fetchingPlayerFailed, fetchingPlayerSuccess, playerInfo]);
@@ -1204,7 +1247,6 @@ const MainGame = () => {
   // ? Display game after all reload-fetches
   useEffect(() => {
     if (fetchingGameSuccess && gameInfo) {
-      setGameLoading(false);
       dispatch(resetFetchingGameSuccess());
     }
     if (fetchingGameFailed) {
@@ -1214,6 +1256,49 @@ const MainGame = () => {
       console.error(error);
     }
   }, [gameInfo, fetchingGameFailed, fetchingGameSuccess]);
+
+  useEffect(() => {
+    if (isReload && gameInfo) {
+      const leftBoxesEls = leftBoxesRef.current;
+      const centerBoxesEls = centerBoxesRef.current;
+      const rightBoxesEls = rightBoxesRef.current;
+      const horiBoxesEls = [
+        ...topBoxesRef.current,
+        ...midBoxesRef.current,
+        ...bottomBoxesRef.current,
+      ];
+
+      if (
+        leftBoxesEls.length &&
+        centerBoxesEls.length &&
+        rightBoxesEls.length &&
+        horiBoxesEls.length
+      ) {
+        const {
+          cubes: { center, left, right },
+        } = gameInfo;
+        setColor(leftBoxesEls, left);
+        setColor(centerBoxesEls, center);
+        setColor(rightBoxesEls, right);
+
+        reconcileColors(CubeEnum.l, leftBoxesEls, horiBoxesEls);
+        reconcileColors(CubeEnum.c, centerBoxesEls, horiBoxesEls);
+        reconcileColors(CubeEnum.r, rightBoxesEls, horiBoxesEls);
+
+        durationRef.current = gameInfo.duration;
+      }
+
+      setIsReload(false);
+      setGameLoading(false);
+      setIsPlay(true);
+    }
+  }, [gameInfo, isReload]);
+
+  useEffect(() => {
+    if (isPlay) {
+      gameTimer();
+    }
+  }, [isPlay]);
 
   return (
     <SectionTemplate id={Section.main}>
@@ -1256,7 +1341,7 @@ const MainGame = () => {
               </div>
 
               <div className="left_side">
-                <p className="time">00:00:00</p>
+                <p className="time">{modDuration}</p>
               </div>
             </nav>
 
