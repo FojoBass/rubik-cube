@@ -32,7 +32,7 @@ const Home = () => {
       music1.play();
       music1.loop = true;
     } else {
-      // todo alert("If no audio, click anywhere on the window to activate it");
+      alert("If no audio, click anywhere on the window to activate it");
 
       const handleClick = (e: MouseEvent) => {
         const check =

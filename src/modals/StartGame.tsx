@@ -61,7 +61,6 @@ const StartGame = () => {
 
     if (isNew && playerName.length > 2 && aviUrl) {
       dispatch(createPlayer({ uid: id ?? "", aviUrl, playerName }));
-      resetFields();
     }
 
     if (isContinue && playerId.length > 5) {

@@ -30,6 +30,8 @@ interface CubeContextInt {
   setIsContinue?: Dispatch<SetStateAction<boolean>>;
   isFormEntry?: boolean;
   setIsFormEntry?: Dispatch<SetStateAction<boolean>>;
+  isDisableControls?: boolean;
+  setIsDisableControls?: Dispatch<SetStateAction<boolean>>;
 }
 
 const CubeContext = createContext<CubeContextInt>({});
@@ -48,6 +50,7 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
   const [isNew, setIsNew] = useState<boolean>(false);
   const [isContinue, setIsContinue] = useState<boolean>(false);
   const [isFormEntry, setIsFormEntry] = useState<boolean>(false);
+  const [isDisableControls, setIsDisableControls] = useState<boolean>(false);
 
   useEffect(() => {
     const musicEls = musicRefs.current;
@@ -77,6 +80,8 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
     setIsContinue,
     isFormEntry,
     setIsFormEntry,
+    isDisableControls,
+    setIsDisableControls,
   };
 
   return (

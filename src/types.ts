@@ -50,3 +50,11 @@ export interface GameInfoInt {
     center: CubeInt[];
   };
 }
+
+export enum CubeEnum {
+  r = "right",
+  l = "left",
+  c = "center",
+  t = "top",
+  b = "bottom",
+}
