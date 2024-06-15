@@ -6,4 +6,32 @@ import cubeSfx from "./assets/audios/sfx/cube.mp3";
 import rejectSfx from "./assets/audios/sfx/reject.mp3";
 import keyboardSfx from "./assets/audios/sfx/keyboard.mp3";
 
-export { music1, music2, acceptSfx, clickSfx, cubeSfx, rejectSfx, keyboardSfx };
+const pauseMenu: { title: string; link?: string }[] = [
+  {
+    title: "Continue",
+  },
+  {
+    title: "Main menu",
+    link: "/",
+  },
+  {
+    title: "Settings",
+  },
+  {
+    title: "Reset",
+  },
+];
+
+const settingsOpts = ["sound", "controls"];
+
+export {
+  music1,
+  music2,
+  acceptSfx,
+  clickSfx,
+  cubeSfx,
+  rejectSfx,
+  keyboardSfx,
+  pauseMenu,
+  settingsOpts,
+};

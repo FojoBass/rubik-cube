@@ -1,14 +1,20 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
+// import {
+//   MdOutlineArrowForward,
+//   MdArrowUpward,
+//   MdOutlineArrowDownward,
+//   MdOutlineArrowBack,
+// } from "react-icons/md";
+import useSfx from "../hooks/useSfx";
+import { clickSfx } from "../data";
+import { CubeEnum } from "../types";
+import { useCubeContext } from "../contexts/cubeContext";
 import {
   MdOutlineArrowForward,
   MdArrowUpward,
   MdOutlineArrowDownward,
   MdOutlineArrowBack,
 } from "react-icons/md";
-import useSfx from "../hooks/useSfx";
-import { clickSfx } from "../data";
-import { CubeEnum } from "../types";
-import { useCubeContext } from "../contexts/cubeContext";
 
 interface ControlsInt {
   rotateCube: (cube: CubeEnum, isClock: boolean) => void;

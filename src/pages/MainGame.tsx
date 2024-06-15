@@ -10,7 +10,6 @@ import {
 import { MouseEventHandler, useEffect, useRef, useState } from "react";
 import { useCubeDispatch, useCubeSelector } from "../app/store";
 import { useCubeContext } from "../contexts/cubeContext";
-import { AiOutlineUndo } from "react-icons/ai";
 import { FaRegSave, FaSpinner } from "react-icons/fa";
 import Lazyload from "../components/Lazyload";
 import { IoPauseOutline } from "react-icons/io5";
@@ -27,6 +26,8 @@ import {
 import { useLocation } from "react-router-dom";
 import Controls from "../components/Controls";
 import { useRecon } from "../hooks/useRecon";
+import { acceptSfx, clickSfx } from "../data";
+import useSfx from "../hooks/useSfx";
 
 // todo setup isChrome functionality for firstEntry
 // *For testing purposes, we will show position
@@ -38,8 +39,8 @@ const MainGame = () => {
   const {
     playerInfo,
     saving,
-    savingFailed,
-    savingSuccess,
+    // savingFailed,
+    // savingSuccess,
     error,
     fetchingGameFailed,
     fetchingGameSuccess,
@@ -49,13 +50,16 @@ const MainGame = () => {
   } = useCubeSelector((state) => state.cube);
   const {
     musicRefs,
-    isChrome,
     isNew,
     isContinue,
     isFormEntry,
     setIsContinue,
     setIsFormEntry,
-    setIsDisableControls,
+    setOpenModal,
+    isPlay,
+    setIsPlay,
+    isReset,
+    setIsReset,
   } = useCubeContext();
   const rightCubeRef = useRef<HTMLDivElement | null>(null);
   const leftCubeRef = useRef<HTMLDivElement | null>(null);
@@ -85,8 +89,8 @@ const MainGame = () => {
   const durationRef = useRef(0);
   const dispatch = useCubeDispatch();
   const {
-    resetSavingFailed,
-    resetSavingSuccess,
+    // resetSavingFailed,
+    // resetSavingSuccess,
     resetFetchingGameFailed,
     resetFetchingGameSuccess,
     resetFetchingPlayerFailed,
@@ -98,7 +102,6 @@ const MainGame = () => {
   const [gameLoading, setGameLoading] = useState(true);
   const [isLoadingFailed, setIsLoadingFailed] = useState(false);
   const [isReload, setIsReload] = useState(false);
-  const [isPlay, setIsPlay] = useState(false);
   const [modDuration, setModDuration] = useState("");
   const { reconciler, reconcileColors } = useRecon({
     bottomBoxesRef,
@@ -110,6 +113,7 @@ const MainGame = () => {
   });
   const [isChanges, setIsChanges] = useState(false);
   const [moves, setMoves] = useState(0);
+  const { playSfx } = useSfx();
 
   const handleSave: MouseEventHandler = () => {
     saveGameInfo();
@@ -251,8 +255,8 @@ const MainGame = () => {
 
     if (playerInfo) {
       if (isFirst) {
-        const id = uid.randomUUID();
-        const gameInfo: GameInfoInt = {
+        const id = gameInfo?.id || uid.randomUUID();
+        const newGameInfo: GameInfoInt = {
           id,
           startedAt: serverTimestamp(),
           uid: playerInfo.uid,
@@ -267,9 +271,10 @@ const MainGame = () => {
           },
         };
 
-        dispatch(createGame(gameInfo));
+        dispatch(createGame(newGameInfo));
         setGameLoading(false);
-        setIsPlay(true);
+        setIsPlay && setIsPlay(true);
+        setIsChanges(false);
       } else {
         const updateInfo: Omit<GameInfoInt, "startedAt" | "isDone"> = {
           duration: durationRef.current,
@@ -283,8 +288,6 @@ const MainGame = () => {
             center: prepCubes(CubeEnum.c),
           },
         };
-
-        console.log(updateInfo);
 
         dispatch(updateGame(updateInfo));
       }
@@ -559,16 +562,59 @@ const MainGame = () => {
 
       setIsReload(false);
       setGameLoading(false);
-      setIsPlay(true);
+      setIsPlay && setIsPlay(true);
       setMoves(gameInfo.moves);
     }
   }, [gameInfo, isReload]);
 
   useEffect(() => {
-    const timer = gameTimer(isPlay);
+    if (isPlay !== undefined) {
+      const timer = gameTimer(isPlay);
 
-    return () => clearInterval(timer);
+      return () => clearInterval(timer);
+    }
   }, [isPlay, isChanges, moves]);
+
+  // ?Reset Game
+  useEffect(() => {
+    if (isReset) {
+      setGameLoading(true);
+      setIsPlay && setIsPlay(false);
+      setMoves(0);
+      durationRef.current = 0;
+      setModDuration("");
+    }
+  }, [isReset]);
+
+  useEffect(() => {
+    const vertCubeEl = vertCubeRef.current;
+    const horCubeEl = horCubeRef.current;
+    if (isReset && gameLoading && horCubeEl && vertCubeEl) {
+      const timer = setTimeout(() => {
+        (async () => {
+          const cubes: CubeEnum[] = [
+            CubeEnum.r,
+            CubeEnum.l,
+            CubeEnum.t,
+            CubeEnum.b,
+          ];
+
+          for (let i = 0; i < 20; i++) {
+            const ind = genRandomNum(cubes.length);
+            const cube = cubes[ind];
+            const isClock = !!genRandomNum(2);
+
+            await randomizer(cube, horCubeEl, vertCubeEl, isClock);
+          }
+
+          saveGameInfo(true);
+          setIsReset && setIsReset(false);
+        })();
+      }, 500);
+
+      return () => clearTimeout(timer);
+    }
+  }, [gameLoading, isReset]);
 
   return (
     <SectionTemplate id={Section.main}>
@@ -596,6 +642,9 @@ const MainGame = () => {
                   className="save_btn"
                   disabled={saving || !isChanges}
                   onClick={handleSave}
+                  onPointerDown={(e) =>
+                    e.currentTarget.disabled || playSfx(acceptSfx)
+                  }
                 >
                   <FaRegSave />
                 </button>
@@ -604,7 +653,16 @@ const MainGame = () => {
                   <AiOutlineUndo />
                 </button> */}
 
-                <button className="menu_btn">
+                <button
+                  className="menu_btn"
+                  onPointerDown={(e) =>
+                    e.currentTarget.disabled || playSfx(clickSfx)
+                  }
+                  onClick={() =>
+                    setOpenModal &&
+                    setOpenModal({ key: ModalKeys.pause, state: true })
+                  }
+                >
                   <IoPauseOutline />
                 </button>
 

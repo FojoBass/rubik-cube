@@ -9,7 +9,7 @@ import {
   useRef,
   useState,
 } from "react";
-import { ModalKeys } from "../types";
+import { ConfirmKeys, ModalKeys } from "../types";
 
 interface CubeContextInt {
   musicRefs?: MutableRefObject<HTMLAudioElement[]>;
@@ -32,6 +32,14 @@ interface CubeContextInt {
   setIsFormEntry?: Dispatch<SetStateAction<boolean>>;
   isDisableControls?: boolean;
   setIsDisableControls?: Dispatch<SetStateAction<boolean>>;
+  isPlay?: boolean;
+  setIsPlay?: Dispatch<SetStateAction<boolean>>;
+  isReset?: boolean;
+  setIsReset?: Dispatch<SetStateAction<boolean>>;
+  isMusic?: boolean;
+  setIsMusic?: Dispatch<SetStateAction<boolean>>;
+  confirmTarget?: ConfirmKeys | "";
+  setConfirmTarget?: Dispatch<SetStateAction<ConfirmKeys | "">>;
 }
 
 const CubeContext = createContext<CubeContextInt>({});
@@ -51,6 +59,10 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
   const [isContinue, setIsContinue] = useState<boolean>(false);
   const [isFormEntry, setIsFormEntry] = useState<boolean>(false);
   const [isDisableControls, setIsDisableControls] = useState<boolean>(false);
+  const [isPlay, setIsPlay] = useState(false);
+  const [isReset, setIsReset] = useState(false);
+  const [confirmTarget, setConfirmTarget] = useState<ConfirmKeys | "">("");
+  const [isMusic, setIsMusic] = useState(false);
 
   useEffect(() => {
     const musicEls = musicRefs.current;
@@ -82,6 +94,14 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
     setIsFormEntry,
     isDisableControls,
     setIsDisableControls,
+    isPlay,
+    setIsPlay,
+    isReset,
+    setIsReset,
+    confirmTarget,
+    setConfirmTarget,
+    isMusic,
+    setIsMusic,
   };
 
   return (

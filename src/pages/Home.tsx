@@ -1,7 +1,7 @@
 import { useEffect } from "react";
 import { useCubeContext } from "../contexts/cubeContext";
 import SectionTemplate from "../templates/SectionTemplate";
-import { Section, SoundIds } from "../types";
+import { ModalKeys, Section, SoundIds } from "../types";
 import useSfx from "../hooks/useSfx";
 import { clickSfx } from "../data";
 import { Link } from "react-router-dom";
@@ -14,12 +14,20 @@ const homeOpt: { title: string; path: string }[] = [
   { title: "continue", path: "/g/nil" },
   { title: "hall of fame", path: "/halloffame" },
   { title: "scores", path: "/scores" },
-  { title: "settings", path: "/settings" },
+  { title: "settings", path: "" },
   { title: "about", path: "/about" },
 ];
 
 const Home = () => {
-  const { musicRefs, isChrome, setIsContinue, setIsNew } = useCubeContext();
+  const {
+    musicRefs,
+    isChrome,
+    setIsContinue,
+    setIsNew,
+    setOpenModal,
+    isMusic,
+    setIsMusic,
+  } = useCubeContext();
   const { playSfx } = useSfx();
 
   // !UNCOMMENT THIS OUT WHEN DONE
@@ -27,11 +35,13 @@ const Home = () => {
   useEffect(() => {
     const musicEls = musicRefs?.current;
 
-    if (!isChrome && musicEls?.length) {
+    setOpenModal && setOpenModal({ key: "", state: false });
+
+    if ((!isChrome || isMusic) && musicEls?.length) {
       const music1 = musicEls.find((el) => el.id === SoundIds.mus1)!;
       music1.play();
       music1.loop = true;
-    } else {
+    } else if (!isMusic) {
       alert("If no audio, click anywhere on the window to activate it");
 
       const handleClick = (e: MouseEvent) => {
@@ -45,6 +55,7 @@ const Home = () => {
           music1.loop = true;
         }
         removeEventListener("click", handleClick);
+        setIsMusic && setIsMusic(true);
       };
 
       addEventListener("click", handleClick);
@@ -54,20 +65,36 @@ const Home = () => {
   return (
     <SectionTemplate id={Section.home}>
       <div className="wrapper">
-        {homeOpt.map((opt) => (
-          <Link
-            className="opt_btn"
-            key={opt.title}
-            onPointerDown={() => playSfx(clickSfx)}
-            to={opt.path}
-            onClick={() => {
-              opt.title === "new" && setIsNew && setIsNew(true);
-              opt.title === "continue" && setIsContinue && setIsContinue(true);
-            }}
-          >
-            {opt.title}
-          </Link>
-        ))}
+        {homeOpt.map((opt) =>
+          opt.path ? (
+            <Link
+              className="opt_btn"
+              key={opt.title}
+              onPointerDown={() => playSfx(clickSfx)}
+              to={opt.path}
+              onClick={() => {
+                opt.title === "new" && setIsNew && setIsNew(true);
+                opt.title === "continue" &&
+                  setIsContinue &&
+                  setIsContinue(true);
+              }}
+            >
+              {opt.title}
+            </Link>
+          ) : (
+            <button
+              className="opt_btn"
+              key={opt.title}
+              onPointerDown={() => playSfx(clickSfx)}
+              onClick={() =>
+                setOpenModal &&
+                setOpenModal({ key: ModalKeys.set, state: true })
+              }
+            >
+              {opt.title}
+            </button>
+          )
+        )}
       </div>
     </SectionTemplate>
   );

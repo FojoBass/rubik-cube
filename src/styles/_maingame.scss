@@ -58,6 +58,10 @@
         &:not(&:disabled):hover {
           opacity: 1;
         }
+
+        &:not(&:disabled):active {
+          scale: 0.9;
+        }
       }
 
       .avi_wrapper {

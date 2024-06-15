@@ -17,7 +17,7 @@ import Lazyload from "../components/Lazyload";
 import { acceptSfx, clickSfx, keyboardSfx, rejectSfx } from "../data";
 import useSfx from "../hooks/useSfx";
 import { useCubeContext } from "../contexts/cubeContext";
-import { useNavigate, useParams } from "react-router-dom";
+import { useLocation, useNavigate, useParams } from "react-router-dom";
 import { useCubeDispatch, useCubeSelector } from "../app/store";
 import { createPlayer, getPlayer } from "../app/features/cubeAsyncThunk";
 import { cubeSlice } from "../app/features/cubeSlice";
@@ -44,11 +44,17 @@ const StartGame = () => {
     );
   }, [id, playerName, aviUrl, playerId]);
   const dispatch = useCubeDispatch();
-  const { isInitializeFailed, isInitializeSuccess, error, loading } =
-    useCubeSelector((state) => state.cube);
+  const {
+    isInitializeFailed,
+    isInitializeSuccess,
+    error,
+    loading,
+    playerInfo,
+  } = useCubeSelector((state) => state.cube);
   const { resetInitializedFailed, resetInitializedSuccess } = cubeSlice.actions;
   const [errMsg, setErrMsg] = useState("");
   const errRef = useRef<HTMLParagraphElement | null>(null);
+  const { pathname } = useLocation();
 
   const resetFields = () => {
     setAviUrl("");
@@ -142,7 +148,11 @@ const StartGame = () => {
           onPointerDown={() => playSfx(rejectSfx)}
           onClick={() => {
             setOpenModal && setOpenModal((prev) => ({ ...prev, state: false }));
-            navigate("/");
+            setIsNew && setIsNew(false);
+            setIsContinue && setIsContinue(false);
+            (isNew || isContinue || pathname.includes("/g/")) &&
+              !playerInfo &&
+              navigate("/");
           }}
         >
           <FaTimes />

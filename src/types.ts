@@ -22,6 +22,13 @@ export enum SoundIds {
 
 export enum ModalKeys {
   start = "startgame",
+  pause = "pausegame",
+  confirm = "confirmaction",
+  set = "settings",
+}
+
+export enum ConfirmKeys {
+  res = "reset",
 }
 
 export interface CubeInt {

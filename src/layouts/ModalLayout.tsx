@@ -3,6 +3,9 @@ import { useCubeContext } from "../contexts/cubeContext";
 import StartGame from "../modals/StartGame";
 import { ModalKeys } from "../types";
 import { useCubeSelector } from "../app/store";
+import PauseGame from "../modals/PauseGame";
+import Confirmations from "../modals/Confirmations";
+import Settings from "../modals/Settings";
 
 const ModalLayout = () => {
   const {
@@ -12,10 +15,11 @@ const ModalLayout = () => {
     isContinue,
     setIsContinue,
     setIsNew,
+    setIsPlay,
   } = useCubeContext();
   const { playerInfo } = useCubeSelector((state) => state.cube);
-  const navigate = useNavigate();
   const { pathname } = useLocation();
+  const navigate = useNavigate();
 
   return (
     <section
@@ -26,6 +30,7 @@ const ModalLayout = () => {
           setOpenModal((prev) => ({ ...prev, state: false }));
           setIsNew && setIsNew(false);
           setIsContinue && setIsContinue(false);
+          openModal?.key === ModalKeys.pause && setIsPlay && setIsPlay(true);
           (isNew || isContinue || pathname.includes("/g/")) &&
             !playerInfo &&
             navigate("/");
@@ -34,6 +39,9 @@ const ModalLayout = () => {
     >
       <div className="center">
         {openModal?.key === ModalKeys.start && <StartGame />}
+        {openModal?.key === ModalKeys.pause && <PauseGame />}
+        {openModal?.key === ModalKeys.confirm && <Confirmations />}
+        {openModal?.key === ModalKeys.set && <Settings />}
       </div>
     </section>
   );
