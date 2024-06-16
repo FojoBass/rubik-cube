@@ -1,5 +1,5 @@
 import { Link } from "react-router-dom";
-import { acceptSfx, pauseMenu, rejectSfx } from "../data";
+import { acceptSfx, clickSfx, pauseMenu, rejectSfx } from "../data";
 import useSfx from "../hooks/useSfx";
 import { useCubeContext } from "../contexts/cubeContext";
 import { MouseEventHandler, useEffect } from "react";
@@ -38,7 +38,7 @@ const PauseGame = () => {
   }, [isPlay, openModal]);
 
   return (
-    <div className="pause_wrapper">
+    <div className="modal_opts_wrapper">
       {pauseMenu.map(({ link, title }) =>
         link ? (
           <Link
@@ -52,7 +52,9 @@ const PauseGame = () => {
         ) : (
           <button
             className="item"
-            onPointerDown={() => playSfx(acceptSfx)}
+            onPointerDown={() =>
+              playSfx(title === "Continue" ? acceptSfx : clickSfx)
+            }
             onClick={handleClick}
             key={title}
           >

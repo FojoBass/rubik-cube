@@ -25,7 +25,7 @@ interface ControlsInt {
 const Controls: FC<ControlsInt> = ({ rotateCube, setIsChanges, setMoves }) => {
   const controlRefs = useRef<HTMLButtonElement[]>([]);
   const { playSfx } = useSfx();
-  const { isDisableControls, setIsDisableControls } = useCubeContext();
+  const { isDisableControls, setIsDisableControls, sfxVol } = useCubeContext();
 
   const showCube = (cube: "v" | "h") => {
     const vertCubeEl = document.querySelector(".vert_cube");
@@ -103,9 +103,10 @@ const Controls: FC<ControlsInt> = ({ rotateCube, setIsChanges, setMoves }) => {
     return () => {
       controlEls.forEach((el) => {
         el.onpointerdown = null;
+        el.onclick = null;
       });
     };
-  }, []);
+  }, [sfxVol]);
 
   return (
     <div className="controls_wrapper">

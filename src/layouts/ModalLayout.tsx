@@ -6,6 +6,8 @@ import { useCubeSelector } from "../app/store";
 import PauseGame from "../modals/PauseGame";
 import Confirmations from "../modals/Confirmations";
 import Settings from "../modals/Settings";
+import SetSound from "../modals/SetSound";
+import SetControls from "../modals/SetControls";
 
 const ModalLayout = () => {
   const {
@@ -42,6 +44,8 @@ const ModalLayout = () => {
         {openModal?.key === ModalKeys.pause && <PauseGame />}
         {openModal?.key === ModalKeys.confirm && <Confirmations />}
         {openModal?.key === ModalKeys.set && <Settings />}
+        {openModal?.key === ModalKeys.setsou && <SetSound />}
+        {openModal?.key === ModalKeys.setcon && <SetControls />}
       </div>
     </section>
   );

@@ -22,7 +22,7 @@ const pauseMenu: { title: string; link?: string }[] = [
   },
 ];
 
-const settingsOpts = ["sound", "controls"];
+const settingsOpts = ["Sound", "Controls"];
 
 export {
   music1,

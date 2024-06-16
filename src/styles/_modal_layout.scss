@@ -19,6 +19,7 @@
     width: 350px;
     padding: 30px;
     border-radius: 20px;
+    position: relative;
   }
 }
 
@@ -164,10 +165,14 @@
 // *End Start Game
 
 // *Pause Game
-.pause_wrapper {
+.modal_opts_wrapper {
   @include flex(center, center, column);
   color: $clr_fnt;
   font-family: $fnt_spc;
+
+  &.settings {
+    align-items: flex-start;
+  }
 
   .item {
     font-size: 1.5rem;
@@ -179,9 +184,31 @@
     &:hover {
       opacity: 1;
     }
+  }
+
+  &:not(&.settings) {
+    .item:active {
+      scale: 0.9;
+    }
+  }
+
+  .back_btn {
+    @include position(absolute, left, top, 20px, 20px);
+    font-size: 1.8rem;
+    opacity: 0.5;
+    transition: opacity ease $trans_mid;
+    padding: 5px;
+
+    &:hover {
+      opacity: 1;
+    }
 
     &:active {
       scale: 0.9;
+    }
+
+    svg {
+      pointer-events: none;
     }
   }
 }
@@ -223,3 +250,118 @@
   }
 }
 // *End Confirmation
+
+// *Set Sound
+.settings {
+  .item {
+    @include flex(flex-start, center);
+    width: 100%;
+    gap: 10px;
+
+    label {
+      width: 30%;
+
+      &:has(+ input[type="checkbox"]) {
+        cursor: pointer;
+        position: relative;
+
+        &:before,
+        &:after {
+          content: "";
+          @include position(absolute, right, top, 0, 50%);
+          @include uniTranslate(Y, -50%);
+          aspect-ratio: 1/1;
+          border-radius: 2px;
+        }
+
+        &::before {
+          background-color: #fff;
+          width: 12px;
+          right: -24px;
+        }
+
+        &::after {
+          background-color: #00173f;
+          width: 9.5px;
+          right: -22.7px;
+          opacity: 0;
+          transition: all ease $trans_mid;
+        }
+      }
+
+      &:has(+ input[type="checkbox"]:checked) {
+        &:after {
+          opacity: 1;
+        }
+      }
+    }
+
+    input {
+      cursor: pointer;
+
+      &[type="checkbox"] {
+        visibility: hidden;
+        pointer-events: none;
+      }
+
+      &.range {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        height: 3px;
+        background-color: #d5d5d5;
+
+        &::-webkit-slider-runnable-track {
+          -webkit-appearance: none;
+          height: 3px;
+        }
+
+        &::-moz-track {
+          -moz-appearance: none;
+          height: 3px;
+        }
+
+        &::-ms-track {
+          appearance: none;
+          height: 3px;
+        }
+
+        &::-webkit-slider-thumb {
+          -webkit-appearance: none;
+          aspect-ratio: 1/1;
+          width: 13px;
+          background-color: red;
+          border-radius: 50%;
+          margin-top: -5px;
+          background-color: #3e78dc;
+          border: none;
+          outline: none;
+        }
+
+        &::-moz-range-thumb {
+          -moz-appearance: none;
+          aspect-ratio: 1/1;
+          width: 13px;
+          background-color: red;
+          border-radius: 50%;
+          margin-top: -5px;
+          background-color: #00173f;
+          border: none;
+        }
+
+        &::-ms-thumb {
+          appearance: none;
+          aspect-ratio: 1/1;
+          width: 13px;
+          background-color: red;
+          border-radius: 50%;
+          margin-top: -5px;
+          background-color: #00173f;
+          outline: none;
+        }
+      }
+    }
+  }
+}
+
+// *End Set Sound

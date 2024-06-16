@@ -23,8 +23,10 @@ export enum SoundIds {
 export enum ModalKeys {
   start = "startgame",
   pause = "pausegame",
-  confirm = "confirmaction",
+  confirm = "confirmation",
   set = "settings",
+  setsou = "set_sound",
+  setcon = "set_controls",
 }
 
 export enum ConfirmKeys {
