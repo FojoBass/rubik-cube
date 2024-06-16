@@ -26,7 +26,7 @@ export const useRecon = ({
     const el = els.find((el) => el.dataset.position === pos);
 
     if (el) {
-      const color = getComputedStyle(el, "before").backgroundColor;
+      const color = getComputedStyle(el).getPropertyValue("--box_clr");
       updateEl.style.setProperty("--box_clr", color);
     } else {
       console.error("There is no element with the position: ", pos);

@@ -171,7 +171,7 @@ const MainGame = () => {
     const el = cubeEls.find((el) => el.dataset.position === position);
 
     if (el) {
-      const color = getComputedStyle(el, "before").backgroundColor;
+      const color = getComputedStyle(el).getPropertyValue("--box_clr");
       return color;
     } else
       throw new Error(`No el found for the position ${position} : ${cubeEls}`);
