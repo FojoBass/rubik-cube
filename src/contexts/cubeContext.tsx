@@ -9,7 +9,14 @@ import {
   useRef,
   useState,
 } from "react";
-import { ConfirmKeys, ModalKeys } from "../types";
+import {
+  ConfirmKeys,
+  ControlType,
+  CubeView,
+  ModalKeys,
+  StorageKeys,
+} from "../types";
+import { storage } from "../helpers";
 
 interface CubeContextInt {
   musicRefs?: MutableRefObject<HTMLAudioElement[]>;
@@ -40,6 +47,10 @@ interface CubeContextInt {
   setIsMusic?: Dispatch<SetStateAction<boolean>>;
   confirmTarget?: ConfirmKeys | "";
   setConfirmTarget?: Dispatch<SetStateAction<ConfirmKeys | "">>;
+  controlType?: ControlType;
+  setControlType?: Dispatch<SetStateAction<ControlType>>;
+  cubeView?: CubeView;
+  setCubeView?: Dispatch<SetStateAction<CubeView>>;
 }
 
 const CubeContext = createContext<CubeContextInt>({});
@@ -63,6 +74,11 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
   const [isReset, setIsReset] = useState(false);
   const [confirmTarget, setConfirmTarget] = useState<ConfirmKeys | "">("");
   const [isMusic, setIsMusic] = useState(false);
+  const [firstEntry, setFirstEntry] = useState(true);
+  const [controlType, setControlType] = useState<ControlType>(
+    navigator.maxTouchPoints > 1 ? ControlType.s : ControlType.bt
+  );
+  const [cubeView, setCubeView] = useState<CubeView>(CubeView.ufr);
 
   useEffect(() => {
     const musicEls = musicRefs.current;
@@ -74,6 +90,34 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
       });
     }
   }, [musicVol, isMute, musicRefs]);
+
+  useEffect(() => {
+    if (!firstEntry)
+      storage.setter(StorageKeys.rcs, {
+        sfxVol,
+        musicVol,
+        isMute,
+        controlType,
+      });
+  }, [sfxVol, musicVol, isMute, firstEntry, controlType]);
+
+  useEffect(() => {
+    if (firstEntry) {
+      const result = storage.getter<{
+        sfxVol: number;
+        musicVol: number;
+        isMute: boolean;
+        controlType: ControlType;
+      }>(StorageKeys.rcs);
+      if (result) {
+        setSfxVol(result.sfxVol);
+        setMusicVol(result.musicVol);
+        setIsMute(result.isMute);
+        setControlType(result.controlType);
+      }
+      setFirstEntry(false);
+    }
+  }, [firstEntry]);
 
   const sharedProps: CubeContextInt = {
     musicRefs,
@@ -102,6 +146,10 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
     setConfirmTarget,
     isMusic,
     setIsMusic,
+    controlType,
+    setControlType,
+    cubeView,
+    setCubeView,
   };
 
   return (

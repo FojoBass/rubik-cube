@@ -253,6 +253,13 @@
 
 // *Set Sound
 .settings {
+  &.revert {
+    .item {
+      justify-content: center;
+      gap: 5px;
+    }
+  }
+
   .item {
     @include flex(flex-start, center);
     width: 100%;
@@ -261,7 +268,7 @@
     label {
       width: 30%;
 
-      &:has(+ input[type="checkbox"]) {
+      &:has(+ input[type="checkbox"], + input[type="radio"]) {
         cursor: pointer;
         position: relative;
 
@@ -289,7 +296,7 @@
         }
       }
 
-      &:has(+ input[type="checkbox"]:checked) {
+      &:has(+ input[type="checkbox"]:checked, + input[type="radio"]:checked) {
         &:after {
           opacity: 1;
         }
@@ -299,7 +306,8 @@
     input {
       cursor: pointer;
 
-      &[type="checkbox"] {
+      &[type="checkbox"],
+      &[type="radio"] {
         visibility: hidden;
         pointer-events: none;
       }

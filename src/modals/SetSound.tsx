@@ -1,6 +1,4 @@
 import { useCubeContext } from "../contexts/cubeContext";
-import { clickSfx } from "../data";
-import useSfx from "../hooks/useSfx";
 import { ModalKeys } from "../types";
 import ModalBackBtn from "../components/ModalBackBtn";
 import { Dispatch, SetStateAction, useEffect, useRef } from "react";

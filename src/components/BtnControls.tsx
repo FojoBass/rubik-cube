@@ -15,32 +15,23 @@ import {
   MdOutlineArrowDownward,
   MdOutlineArrowBack,
 } from "react-icons/md";
+import useHooks from "../hooks/useHooks";
 
-interface ControlsInt {
+interface BtnControlsInt {
   rotateCube: (cube: CubeEnum, isClock: boolean) => void;
   setIsChanges: Dispatch<SetStateAction<boolean>>;
   setMoves: Dispatch<SetStateAction<number>>;
 }
 
-const Controls: FC<ControlsInt> = ({ rotateCube, setIsChanges, setMoves }) => {
+const BtnControls: FC<BtnControlsInt> = ({
+  rotateCube,
+  setIsChanges,
+  setMoves,
+}) => {
   const controlRefs = useRef<HTMLButtonElement[]>([]);
   const { playSfx } = useSfx();
   const { isDisableControls, setIsDisableControls, sfxVol } = useCubeContext();
-
-  const showCube = (cube: "v" | "h") => {
-    const vertCubeEl = document.querySelector(".vert_cube");
-    const horCubeEl = document.querySelector(".hor_cube");
-
-    if (vertCubeEl && horCubeEl) {
-      if (cube === "v") {
-        vertCubeEl.classList.add("active");
-        horCubeEl.classList.remove("active");
-      } else {
-        vertCubeEl.classList.remove("active");
-        horCubeEl.classList.add("active");
-      }
-    }
-  };
+  const { showCube } = useHooks();
 
   useEffect(() => {
     const controlEls = controlRefs.current;
@@ -225,4 +216,4 @@ const Controls: FC<ControlsInt> = ({ rotateCube, setIsChanges, setMoves }) => {
   );
 };
 
-export default Controls;
+export default BtnControls;

@@ -1,3 +1,5 @@
+import { StorageKeys } from "./types";
+
 export const genRandomNum = (
   limit: number,
   isLower: boolean = true
@@ -16,3 +18,16 @@ export const formatDuration = (dur: number): string => {
     .toString()
     .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
 };
+
+class LocalStorage {
+  setter(key: StorageKeys, data: any) {
+    localStorage.setItem(key, JSON.stringify(data));
+  }
+
+  getter<T>(key: string): T | null {
+    const check = localStorage.getItem(key);
+    return check ? JSON.parse(check) : null;
+  }
+}
+
+export const storage = new LocalStorage();

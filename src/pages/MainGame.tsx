@@ -1,7 +1,9 @@
 import SectionTemplate from "../templates/SectionTemplate";
 import {
+  ControlType,
   CubeEnum,
   CubeInt,
+  CubeView,
   GameInfoInt,
   ModalKeys,
   Section,
@@ -24,16 +26,14 @@ import {
   updateGame,
 } from "../app/features/cubeAsyncThunk";
 import { useLocation } from "react-router-dom";
-import Controls from "../components/Controls";
 import { useRecon } from "../hooks/useRecon";
 import { acceptSfx, clickSfx } from "../data";
 import useSfx from "../hooks/useSfx";
+import BtnControls from "../components/BtnControls";
+import SwipeControls from "../components/SwipeControls";
+import { TbRotate3D } from "react-icons/tb";
 
-// todo setup isChrome functionality for firstEntry
-// *For testing purposes, we will show position
-
-// *Finally implemented fetchings for reloads
-// todo Reflect fetched gameInfo in the cubes
+// todo Save Settings in user store
 
 const MainGame = () => {
   const {
@@ -60,6 +60,9 @@ const MainGame = () => {
     setIsPlay,
     isReset,
     setIsReset,
+    controlType,
+    cubeView,
+    setCubeView,
   } = useCubeContext();
   const rightCubeRef = useRef<HTMLDivElement | null>(null);
   const leftCubeRef = useRef<HTMLDivElement | null>(null);
@@ -114,6 +117,17 @@ const MainGame = () => {
   const [isChanges, setIsChanges] = useState(false);
   const [moves, setMoves] = useState(0);
   const { playSfx } = useSfx();
+  const swipeRef = useRef<HTMLDivElement | null>(null);
+  const isRotateRef = useRef(false);
+  const iniXdeg = useRef<number>(0);
+  const iniYdeg = useRef<number>(0);
+  const iniX = useRef(0);
+  const iniY = useRef(0);
+  const rotateBtnRef = useRef<HTMLButtonElement | null>(null);
+
+  const handleViewChange = (el: HTMLElement, y: number, x: number) => {
+    el.style.transform = `translate(-50%, -50%) rotateY(${y}deg) rotateX(${x}deg)`;
+  };
 
   const handleSave: MouseEventHandler = () => {
     saveGameInfo();
@@ -616,6 +630,108 @@ const MainGame = () => {
     }
   }, [gameLoading, isReset]);
 
+  // ? View Change
+  useEffect(() => {
+    const vertCubeEl = vertCubeRef.current;
+    const horCubeEl = horCubeRef.current;
+    const swipeEl = swipeRef.current;
+
+    if (cubeView && vertCubeEl && horCubeEl && swipeEl) {
+      switch (cubeView) {
+        case CubeView.ufr:
+          handleViewChange(vertCubeEl, -20, -20);
+          handleViewChange(horCubeEl, -20, -20);
+          handleViewChange(swipeEl, -20, -20);
+          break;
+        case CubeView.ufl:
+          handleViewChange(vertCubeEl, 20, -20);
+          handleViewChange(horCubeEl, 20, -20);
+          handleViewChange(swipeEl, 20, -20);
+          break;
+        case CubeView.bfr:
+          handleViewChange(vertCubeEl, -20, 20);
+          handleViewChange(horCubeEl, -20, 20);
+          handleViewChange(swipeEl, -20, 20);
+          break;
+        case CubeView.bfl:
+          handleViewChange(vertCubeEl, 20, 20);
+          handleViewChange(horCubeEl, 20, 20);
+          handleViewChange(swipeEl, 20, 20);
+          break;
+        default:
+          console.error("That is impossible!");
+          return;
+      }
+    }
+  }, [cubeView]);
+
+  useEffect(() => {
+    const horCubeEl = horCubeRef.current;
+    const vertCubeEl = vertCubeRef.current;
+
+    const handlePointerDown = (e: PointerEvent) => {
+      if (e.target === rotateBtnRef.current) {
+        isRotateRef.current = true;
+
+        iniXdeg.current =
+          cubeView === CubeView.bfl || cubeView === CubeView.bfr
+            ? 20
+            : cubeView === CubeView.ufl || cubeView === CubeView.ufr
+            ? -20
+            : 0;
+
+        iniYdeg.current =
+          cubeView === CubeView.bfl || cubeView === CubeView.ufl
+            ? 20
+            : cubeView === CubeView.bfr || cubeView === CubeView.ufr
+            ? -20
+            : 0;
+
+        iniX.current = e.clientX;
+        iniY.current = e.clientY;
+      }
+    };
+
+    const handlePointerMove = (e: PointerEvent) => {
+      if (isRotateRef.current) {
+        const dx = (e.clientX - iniX.current) / 2;
+        const dy = (e.clientY - iniY.current) / 2;
+
+        handleViewChange(
+          vertCubeEl!,
+          iniYdeg.current + dx,
+          iniXdeg.current - dy
+        );
+        handleViewChange(
+          horCubeEl!,
+          iniYdeg.current + dx,
+          iniXdeg.current - dy
+        );
+      }
+    };
+
+    const handlePointerUp = () => {
+      if (isRotateRef.current) {
+        handleViewChange(vertCubeEl!, iniYdeg.current, iniXdeg.current);
+        handleViewChange(horCubeEl!, iniYdeg.current, iniXdeg.current);
+
+        isRotateRef.current = false;
+      }
+    };
+
+    if (horCubeEl && vertCubeEl) {
+      addEventListener("pointerdown", handlePointerDown);
+      addEventListener("pointermove", handlePointerMove);
+      addEventListener("pointerup", handlePointerUp);
+    }
+
+    return () => {
+      removeEventListener("pointerdown", handlePointerDown);
+      removeEventListener("pointermove", handlePointerMove);
+      removeEventListener("pointerup", handlePointerUp);
+    };
+  }, [cubeView]);
+
   return (
     <SectionTemplate id={Section.main}>
       <div className="main_wrapper">
@@ -683,11 +799,78 @@ const MainGame = () => {
             </nav>
 
             <main className={`${gameLoading || isLoadingFailed ? "hide" : ""}`}>
-              <Controls
+              <SwipeControls
+                elRef={swipeRef}
+                bottomCubeRef={bottomCubeRef}
+                leftCubeRef={leftCubeRef}
+                rightCubeRef={rightCubeRef}
+                topCubeRef={topCubeRef}
+                bottomCubeAngle={bottomCubeAngle}
+                leftCubeAngle={leftCubeAngle}
+                rightCubeAngle={rightCubeAngle}
+                topCubeAngle={topCubeAngle}
                 rotateCube={rotateCube}
                 setIsChanges={setIsChanges}
                 setMoves={setMoves}
               />
+
+              {controlType === ControlType.s || (
+                <BtnControls
+                  rotateCube={rotateCube}
+                  setIsChanges={setIsChanges}
+                  setMoves={setMoves}
+                />
+              )}
+
+              <div className="cube_view">
+                <button
+                  onClick={() => setCubeView && setCubeView(CubeView.ufr)}
+                  onPointerDown={() => playSfx(clickSfx)}
+                  className={`view_cube ufr ${
+                    cubeView === CubeView.ufr ? "active" : ""
+                  }`}
+                >
+                  <div className="face"></div>
+                  <div className="right"></div>
+                  <div className="up"></div>
+                </button>
+
+                <button
+                  onClick={() => setCubeView && setCubeView(CubeView.ufl)}
+                  onPointerDown={() => playSfx(clickSfx)}
+                  className={`view_cube ufl ${
+                    cubeView === CubeView.ufl ? "active" : ""
+                  }`}
+                >
+                  <div className="face"></div>
+                  <div className="left"></div>
+                  <div className="up"></div>
+                </button>
+
+                <button
+                  onClick={() => setCubeView && setCubeView(CubeView.bfr)}
+                  onPointerDown={() => playSfx(clickSfx)}
+                  className={`view_cube bfr ${
+                    cubeView === CubeView.bfr ? "active" : ""
+                  }`}
+                >
+                  <div className="face"></div>
+                  <div className="right"></div>
+                  <div className="bottom"></div>
+                </button>
+
+                <button
+                  onClick={() => setCubeView && setCubeView(CubeView.bfl)}
+                  onPointerDown={() => playSfx(clickSfx)}
+                  className={`view_cube bfl ${
+                    cubeView === CubeView.bfl ? "active" : ""
+                  }`}
+                >
+                  <div className="face"></div>
+                  <div className="left"></div>
+                  <div className="bottom"></div>
+                </button>
+              </div>
 
               <div className="cube vert_cube active" ref={vertCubeRef}>
                 <div className="sub_cube right_cube" ref={rightCubeRef}>
@@ -2172,6 +2355,10 @@ const MainGame = () => {
                   </div>
                 </div>
               </div>
+
+              <button className="rotate_btn" ref={rotateBtnRef}>
+                <TbRotate3D />
+              </button>
             </main>
           </>
         ) : (

@@ -2,7 +2,6 @@ import { useEffect, useRef, useState } from "react";
 import About from "./pages/About";
 import HallOfFame from "./pages/HallOfFame";
 import Home from "./pages/Home";
-import Scores from "./pages/Scores";
 import bgImg from "./assets/images/bg.png";
 import bgVid from "./assets/videos/rubik_bg.mp4";
 import Audio from "./components/Audio";
@@ -27,7 +26,6 @@ const App = () => {
         <Route path="/g/:id" element={<MainGame />} />
         <Route path="/halloffame" element={<HallOfFame />} />
         <Route path="/about" element={<About />} />
-        <Route path="/scores" element={<Scores />} />
       </Route>
     )
   );

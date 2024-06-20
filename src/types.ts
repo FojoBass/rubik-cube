@@ -67,3 +67,20 @@ export enum CubeEnum {
   t = "top",
   b = "bottom",
 }
+
+export enum StorageKeys {
+  rcs = "rc-sound",
+}
+
+export enum ControlType {
+  bt = "button",
+  s = "swipe",
+  b = "both",
+}
+
+export enum CubeView {
+  ufr = "up-face-right",
+  ufl = "up-face-left",
+  bfr = "bottom-face-right",
+  bfl = "bottom-face-left",
+}
