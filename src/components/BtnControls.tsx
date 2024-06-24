@@ -18,7 +18,11 @@ import {
 import useHooks from "../hooks/useHooks";
 
 interface BtnControlsInt {
-  rotateCube: (cube: CubeEnum, isClock: boolean) => void;
+  rotateCube: (
+    cube: CubeEnum,
+    isClock: boolean,
+    isPlayerInteract: boolean
+  ) => void;
   setIsChanges: Dispatch<SetStateAction<boolean>>;
   setMoves: Dispatch<SetStateAction<number>>;
 }
@@ -52,35 +56,35 @@ const BtnControls: FC<BtnControlsInt> = ({
 
           switch (dir) {
             case "right-clock":
-              rotateCube(CubeEnum.r, true);
+              rotateCube(CubeEnum.r, true, true);
               showCube("v");
               break;
             case "right-aclock":
-              rotateCube(CubeEnum.r, false);
+              rotateCube(CubeEnum.r, false, true);
               showCube("v");
               break;
             case "left-clock":
-              rotateCube(CubeEnum.l, true);
+              rotateCube(CubeEnum.l, true, true);
               showCube("v");
               break;
             case "left-aclock":
-              rotateCube(CubeEnum.l, false);
+              rotateCube(CubeEnum.l, false, true);
               showCube("v");
               break;
             case "top-clock":
-              rotateCube(CubeEnum.t, true);
+              rotateCube(CubeEnum.t, true, true);
               showCube("h");
               break;
             case "top-aclock":
-              rotateCube(CubeEnum.t, false);
+              rotateCube(CubeEnum.t, false, true);
               showCube("h");
               break;
             case "bottom-clock":
-              rotateCube(CubeEnum.b, true);
+              rotateCube(CubeEnum.b, true, true);
               showCube("h");
               break;
             case "bottom-aclock":
-              rotateCube(CubeEnum.b, false);
+              rotateCube(CubeEnum.b, false, true);
               showCube("h");
               break;
             default:

@@ -24,6 +24,7 @@ interface InitialStateInt {
   fetchingPlayerFailed: boolean;
   fetchingGameSuccess: boolean;
   fetchingGameFailed: boolean;
+  isComplete: boolean;
 }
 
 const initialState: InitialStateInt = {
@@ -42,6 +43,7 @@ const initialState: InitialStateInt = {
   fetchingPlayerFailed: false,
   fetchingGameSuccess: false,
   fetchingGameFailed: false,
+  isComplete: false,
 };
 
 export const cubeSlice = createSlice({
@@ -71,6 +73,9 @@ export const cubeSlice = createSlice({
     },
     resetSavingFailed(state) {
       state.savingFailed = false;
+    },
+    setIsComplete(state, action: PayloadAction<boolean>) {
+      state.isComplete = action.payload;
     },
   },
   extraReducers: (builder) => {

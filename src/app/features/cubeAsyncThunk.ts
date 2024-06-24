@@ -3,7 +3,8 @@ import { GameInfoInt, PlayerInfoInt } from "../../types";
 import { serverTimestamp } from "firebase/firestore";
 import { cubeServices } from "../../services/cubeServices";
 
-// todo First game info will be saved after first gamee initialization
+// todo Setup congratulatory modal
+// todo remeber to merge branch
 
 // ? Create Player
 export const createPlayer = createAsyncThunk<
@@ -62,6 +63,8 @@ export const getGameInfo = createAsyncThunk<GameInfoInt, { uid: string }>(
       querySnapshot.forEach((doc) => {
         gameInfo = doc.data();
       });
+
+      console.log({ gameInfo });
 
       return {
         ...gameInfo,

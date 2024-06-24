@@ -585,6 +585,7 @@
       @include biTranslate(-50%, -50%);
       width: calc(1.2 * var(--cube_width));
       aspect-ratio: 1/1.8;
+      z-index: 2;
 
       .pos_wrapper {
         position: absolute;

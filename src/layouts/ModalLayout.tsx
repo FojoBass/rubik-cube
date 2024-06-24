@@ -8,6 +8,7 @@ import Confirmations from "../modals/Confirmations";
 import Settings from "../modals/Settings";
 import SetSound from "../modals/SetSound";
 import SetControls from "../modals/SetControls";
+import GameComplete from "../modals/GameComplete";
 
 const ModalLayout = () => {
   const {
@@ -46,6 +47,7 @@ const ModalLayout = () => {
         {openModal?.key === ModalKeys.set && <Settings />}
         {openModal?.key === ModalKeys.setsou && <SetSound />}
         {openModal?.key === ModalKeys.setcon && <SetControls />}
+        {openModal?.key === ModalKeys.comp && <GameComplete />}
       </div>
     </section>
   );

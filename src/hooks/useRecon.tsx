@@ -1,5 +1,6 @@
 import { MutableRefObject } from "react";
 import { CubeEnum } from "../types";
+import useHooks from "./useHooks";
 
 interface ReconInt {
   rightBoxesRef: MutableRefObject<HTMLSpanElement[]>;
@@ -18,6 +19,8 @@ export const useRecon = ({
   midBoxesRef,
   bottomBoxesRef,
 }: ReconInt) => {
+  const { checkCube } = useHooks();
+
   const updateColor = (
     els: HTMLElement[],
     updateEl: HTMLElement,
@@ -40,14 +43,19 @@ export const useRecon = ({
     el.textContent = newPos;
   };
 
+  // ? This is for vertcube
+  const updateSides = (el: HTMLElement, side: string) => {
+    el.dataset.side = side;
+  };
+
   const reconcileColors = (
     cube: CubeEnum,
     templateCubeEls: HTMLElement[],
     modCubeEls: HTMLElement[]
   ) => {
-    // ? cube=> The cube that is the model
-    // ? templateCubeEls the elements in the model cube
-    // ? modCubeEls The cubeEls to be modified or reconciled to the model
+    // ? cube => The cube that is the model (the rotated cube)
+    // ? templateCubeEls => The elements in the model cube
+    // ? modCubeEls => The cubeEls to be modified or reconciled to the model
     switch (cube) {
       case CubeEnum.l:
         modCubeEls.forEach((el) => {
@@ -395,7 +403,11 @@ export const useRecon = ({
   };
 
   // *Reconciles all rotations
-  const reconciler = (cube: CubeEnum, isClock: boolean): Promise<void> => {
+  const reconciler = (
+    cube: CubeEnum,
+    isClock: boolean,
+    isPlayerInteract: boolean
+  ): Promise<void> => {
     return new Promise((resolve) => {
       const rightBoxesEls = rightBoxesRef.current;
       const leftBoxesEls = leftBoxesRef.current;
@@ -422,39 +434,51 @@ export const useRecon = ({
               switch (position) {
                 case "lf1":
                   updatePosition(el, isClock ? "lu1" : "ld3");
+                  updateSides(el, isClock ? "top" : "bottom");
                   break;
                 case "lf2":
                   updatePosition(el, isClock ? "lu2" : "ld2");
+                  updateSides(el, isClock ? "top" : "bottom");
                   break;
                 case "lf3":
                   updatePosition(el, isClock ? "lu3" : "ld1");
+                  updateSides(el, isClock ? "top" : "bottom");
                   break;
                 case "ld3":
                   updatePosition(el, isClock ? "lf1" : "lb3");
+                  updateSides(el, isClock ? "face" : "back");
                   break;
                 case "ld2":
                   updatePosition(el, isClock ? "lf2" : "lb2");
+                  updateSides(el, isClock ? "face" : "back");
                   break;
                 case "ld1":
                   updatePosition(el, isClock ? "lf3" : "lb1");
+                  updateSides(el, isClock ? "face" : "back");
                   break;
                 case "lb3":
                   updatePosition(el, isClock ? "ld3" : "lu1");
+                  updateSides(el, isClock ? "bottom" : "top");
                   break;
                 case "lb2":
                   updatePosition(el, isClock ? "ld2" : "lu2");
+                  updateSides(el, isClock ? "bottom" : "top");
                   break;
                 case "lb1":
                   updatePosition(el, isClock ? "ld1" : "lu3");
+                  updateSides(el, isClock ? "bottom" : "top");
                   break;
                 case "lu1":
                   updatePosition(el, isClock ? "lb3" : "lf1");
+                  updateSides(el, isClock ? "back" : "face");
                   break;
                 case "lu2":
                   updatePosition(el, isClock ? "lb2" : "lf2");
+                  updateSides(el, isClock ? "back" : "face");
                   break;
                 case "lu3":
                   updatePosition(el, isClock ? "lb1" : "lf3");
+                  updateSides(el, isClock ? "back" : "face");
                   break;
                 case "lsu1":
                   updatePosition(el, isClock ? "lsu3" : "lsd1");
@@ -497,39 +521,51 @@ export const useRecon = ({
               switch (position) {
                 case "rf1":
                   updatePosition(el, isClock ? "ru1" : "rd3");
+                  updateSides(el, isClock ? "top" : "bottom");
                   break;
                 case "rf2":
                   updatePosition(el, isClock ? "ru2" : "rd2");
+                  updateSides(el, isClock ? "top" : "bottom");
                   break;
                 case "rf3":
                   updatePosition(el, isClock ? "ru3" : "rd1");
+                  updateSides(el, isClock ? "top" : "bottom");
                   break;
                 case "rd3":
                   updatePosition(el, isClock ? "rf1" : "rb3");
+                  updateSides(el, isClock ? "face" : "back");
                   break;
                 case "rd2":
                   updatePosition(el, isClock ? "rf2" : "rb2");
+                  updateSides(el, isClock ? "face" : "back");
                   break;
                 case "rd1":
                   updatePosition(el, isClock ? "rf3" : "rb1");
+                  updateSides(el, isClock ? "face" : "back");
                   break;
                 case "rb3":
                   updatePosition(el, isClock ? "rd3" : "ru1");
+                  updateSides(el, isClock ? "bottom" : "top");
                   break;
                 case "rb2":
                   updatePosition(el, isClock ? "rd2" : "ru2");
+                  updateSides(el, isClock ? "bottom" : "top");
                   break;
                 case "rb1":
                   updatePosition(el, isClock ? "rd1" : "ru3");
+                  updateSides(el, isClock ? "bottom" : "top");
                   break;
                 case "ru1":
                   updatePosition(el, isClock ? "rb3" : "rf1");
+                  updateSides(el, isClock ? "back" : "face");
                   break;
                 case "ru2":
                   updatePosition(el, isClock ? "rb2" : "rf2");
+                  updateSides(el, isClock ? "back" : "face");
                   break;
                 case "ru3":
                   updatePosition(el, isClock ? "rb1" : "rf3");
+                  updateSides(el, isClock ? "back" : "face");
                   break;
                 case "rsu1":
                   updatePosition(el, isClock ? "rsu3" : "rsd1");
@@ -759,6 +795,8 @@ export const useRecon = ({
             console.error("There is a bug here");
             return;
         }
+
+        isPlayerInteract && checkCube(vertBoxesEls);
       }
 
       resolve();

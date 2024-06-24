@@ -172,8 +172,6 @@ const MainGame = () => {
         rotateCube(cube, isClock);
       }
 
-      // await reconciler(cube, isClock);
-
       const timer = setTimeout(() => {
         clearTimeout(timer);
         resolve();
@@ -354,7 +352,11 @@ const MainGame = () => {
     return 0;
   };
 
-  const rotateCube = async (cube: CubeEnum, isClock: boolean) => {
+  const rotateCube = async (
+    cube: CubeEnum,
+    isClock: boolean,
+    isPlayerInteract: boolean = false
+  ) => {
     const rightCubeEl = rightCubeRef.current;
     const leftCubeEl = leftCubeRef.current;
     const topCubeEl = topCubeRef.current;
@@ -406,7 +408,7 @@ const MainGame = () => {
           return;
       }
 
-      await reconciler(cube, isClock);
+      await reconciler(cube, isClock, isPlayerInteract);
     }
   };
 
@@ -491,7 +493,7 @@ const MainGame = () => {
           CubeEnum.b,
         ];
 
-        for (let i = 0; i < 20; i++) {
+        for (let i = 0; i < 1; i++) {
           const ind = genRandomNum(cubes.length);
           const cube = cubes[ind];
           const isClock = !!genRandomNum(2);

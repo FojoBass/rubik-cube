@@ -23,7 +23,11 @@ interface SwipeControlsInt {
   leftCubeAngle: MutableRefObject<number>;
   topCubeAngle: MutableRefObject<number>;
   bottomCubeAngle: MutableRefObject<number>;
-  rotateCube: (cube: CubeEnum, isClock: boolean) => void;
+  rotateCube: (
+    cube: CubeEnum,
+    isClock: boolean,
+    isPlayerInteract: boolean
+  ) => void;
   setIsChanges: Dispatch<SetStateAction<boolean>>;
   setMoves: Dispatch<SetStateAction<number>>;
 }
@@ -161,7 +165,7 @@ const SwipeControls: FC<SwipeControlsInt> = ({
             setIsChanges(true);
             setMoves((prev) => prev + 1);
 
-            rotateCube(cube.current, vertDir.current);
+            rotateCube(cube.current, vertDir.current, true);
           } else {
             setTransform(rightCubeEl, rightCubeAngle.current, "X");
           }
@@ -172,7 +176,7 @@ const SwipeControls: FC<SwipeControlsInt> = ({
             setIsChanges(true);
             setMoves((prev) => prev + 1);
 
-            rotateCube(cube.current, vertDir.current);
+            rotateCube(cube.current, vertDir.current, true);
           } else {
             setTransform(leftCubeEl, leftCubeAngle.current, "X");
           }
@@ -183,7 +187,7 @@ const SwipeControls: FC<SwipeControlsInt> = ({
             setIsChanges(true);
             setMoves((prev) => prev + 1);
 
-            rotateCube(cube.current, horDir.current);
+            rotateCube(cube.current, horDir.current, true);
           } else {
             setTransform(topCubeEl, topCubeAngle.current, "Y");
           }
@@ -194,7 +198,7 @@ const SwipeControls: FC<SwipeControlsInt> = ({
             setIsChanges(true);
             setMoves((prev) => prev + 1);
 
-            rotateCube(cube.current, horDir.current);
+            rotateCube(cube.current, horDir.current, true);
           } else {
             setTransform(bottomCubeEl, bottomCubeAngle.current, "Y");
           }
