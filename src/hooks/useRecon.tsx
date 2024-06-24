@@ -30,7 +30,6 @@ export const useRecon = ({
       updateEl.style.setProperty("--box_clr", color);
     } else {
       console.error("There is no element with the position: ", pos);
-
       console.log("Elements for the above error ", els);
     }
   };
@@ -418,7 +417,7 @@ export const useRecon = ({
           case CubeEnum.l:
             leftBoxesEls.forEach((el) => {
               const position = el.dataset.position;
-              console.log({ position, el, cube });
+              // console.log({ position, el, cube });
 
               switch (position) {
                 case "lf1":
@@ -470,7 +469,7 @@ export const useRecon = ({
                   updatePosition(el, isClock ? "lsu2" : "lsd2");
                   break;
                 case "lsm2":
-                  console.log("lsm2 is fixed");
+                  // console.log("lsm2 is fixed");
                   break;
                 case "lsm3":
                   updatePosition(el, isClock ? "lsd2" : "lsu2");
@@ -493,7 +492,7 @@ export const useRecon = ({
           case CubeEnum.r:
             rightBoxesEls.forEach((el) => {
               const position = el.dataset.position;
-              console.log({ position, el, cube });
+              // console.log({ position, el, cube });
 
               switch (position) {
                 case "rf1":
@@ -545,7 +544,7 @@ export const useRecon = ({
                   updatePosition(el, isClock ? "rsu2" : "rsd2");
                   break;
                 case "rsm2":
-                  console.log(position, " = rsm2 is fixed");
+                  // console.log(position, " = rsm2 is fixed");
                   break;
                 case "rsm3":
                   updatePosition(el, isClock ? "rsd2" : "rsu2");
@@ -570,7 +569,7 @@ export const useRecon = ({
           case CubeEnum.t:
             topBoxesEls.forEach((el) => {
               const position = el.dataset.position;
-              console.log({ position, el, cube });
+              // console.log({ position, el, cube });
 
               switch (position) {
                 case "utl1":
@@ -586,7 +585,7 @@ export const useRecon = ({
                   updatePosition(el, isClock ? "utc1" : "utc3");
                   break;
                 case "utc2":
-                  console.log(position, " = utc2 is fixed");
+                  // console.log(position, " = utc2 is fixed");
                   break;
                 case "utr2":
                   updatePosition(el, isClock ? "utc3" : "utc1");
@@ -645,7 +644,7 @@ export const useRecon = ({
           case CubeEnum.b:
             bottomBoxesEls.forEach((el) => {
               const position = el.dataset.position;
-              console.log({ position, el, cube });
+              // console.log({ position, el, cube });
 
               switch (position) {
                 case "dbl1":
@@ -661,7 +660,7 @@ export const useRecon = ({
                   updatePosition(el, isClock ? "dbc1" : "dbc3");
                   break;
                 case "dbc2":
-                  console.log("dbc2 is fixed");
+                  // console.log("dbc2 is fixed");
                   break;
                 case "dbr2":
                   updatePosition(el, isClock ? "dbc3" : "dbc1");

@@ -890,6 +890,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rf1"
+                      data-side="face"
                     >
                       rf1
                     </span>
@@ -901,6 +902,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rf2"
+                      data-side="face"
                     >
                       rf2
                     </span>
@@ -912,6 +914,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rf3"
+                      data-side="face"
                     >
                       rf3
                     </span>
@@ -933,6 +936,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rb1"
+                      data-side="back"
                     >
                       rb1
                     </span>
@@ -944,6 +948,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rb2"
+                      data-side="back"
                     >
                       rb2
                     </span>
@@ -955,6 +960,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rb3"
+                      data-side="back"
                     >
                       rb3
                     </span>
@@ -976,6 +982,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="ru1"
+                      data-side="top"
                     >
                       ru1
                     </span>
@@ -987,6 +994,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="ru2"
+                      data-side="top"
                     >
                       ru2
                     </span>
@@ -998,6 +1006,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="ru3"
+                      data-side="top"
                     >
                       ru3
                     </span>
@@ -1019,6 +1028,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rd1"
+                      data-side="bottom"
                     >
                       rd1
                     </span>
@@ -1030,6 +1040,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rd2"
+                      data-side="bottom"
                     >
                       rd2
                     </span>
@@ -1041,6 +1052,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rd3"
+                      data-side="bottom"
                     >
                       rd3
                     </span>
@@ -1062,6 +1074,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsu1"
+                      data-side="rside"
                     >
                       rsu1
                     </span>
@@ -1073,6 +1086,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsu2"
+                      data-side="rside"
                     >
                       rsu2
                     </span>
@@ -1084,6 +1098,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsu3"
+                      data-side="rside"
                     >
                       rsu3
                     </span>
@@ -1095,6 +1110,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsm1"
+                      data-side="rside"
                     >
                       rsm1
                     </span>
@@ -1106,6 +1122,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsm2"
+                      data-side="rside"
                     >
                       rsm2
                     </span>
@@ -1117,6 +1134,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsm3"
+                      data-side="rside"
                     >
                       rsm3
                     </span>
@@ -1128,6 +1146,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsd1"
+                      data-side="rside"
                     >
                       rsd1
                     </span>
@@ -1139,6 +1158,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsd2"
+                      data-side="rside"
                     >
                       rsd2
                     </span>
@@ -1150,6 +1170,7 @@ const MainGame = () => {
                         rightBoxesRef.current.push(el)
                       }
                       data-position="rsd3"
+                      data-side="rside"
                     >
                       rsd3
                     </span>
@@ -1173,6 +1194,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cf1"
+                      data-side="face"
                     >
                       cf1
                     </span>
@@ -1184,6 +1206,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cf2"
+                      data-side="face"
                     >
                       cf2
                     </span>
@@ -1195,6 +1218,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cf3"
+                      data-side="face"
                     >
                       cf3
                     </span>
@@ -1216,6 +1240,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cb1"
+                      data-side="back"
                     >
                       cb1
                     </span>
@@ -1227,6 +1252,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cb2"
+                      data-side="back"
                     >
                       cb2
                     </span>
@@ -1238,6 +1264,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cb3"
+                      data-side="back"
                     >
                       cb3
                     </span>
@@ -1259,6 +1286,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cu1"
+                      data-side="top"
                     >
                       cu1
                     </span>
@@ -1270,6 +1298,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cu2"
+                      data-side="top"
                     >
                       cu2
                     </span>
@@ -1281,6 +1310,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cu3"
+                      data-side="top"
                     >
                       cu3
                     </span>
@@ -1302,6 +1332,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cd1"
+                      data-side="bottom"
                     >
                       cd1
                     </span>
@@ -1313,6 +1344,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cd2"
+                      data-side="bottom"
                     >
                       cd2
                     </span>
@@ -1324,6 +1356,7 @@ const MainGame = () => {
                         centerBoxesRef.current.push(el)
                       }
                       data-position="cd3"
+                      data-side="bottom"
                     >
                       cd3
                     </span>
@@ -1347,6 +1380,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lf1"
+                      data-side="face"
                     >
                       lf1
                     </span>
@@ -1358,6 +1392,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lf2"
+                      data-side="face"
                     >
                       lf2
                     </span>
@@ -1369,6 +1404,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lf3"
+                      data-side="face"
                     >
                       lf3
                     </span>
@@ -1390,6 +1426,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lb1"
+                      data-side="back"
                     >
                       lb1
                     </span>
@@ -1401,6 +1438,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lb2"
+                      data-side="back"
                     >
                       lb2
                     </span>
@@ -1412,6 +1450,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lb3"
+                      data-side="back"
                     >
                       lb3
                     </span>
@@ -1433,6 +1472,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lu1"
+                      data-side="top"
                     >
                       lu1
                     </span>
@@ -1444,6 +1484,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lu2"
+                      data-side="top"
                     >
                       lu2
                     </span>
@@ -1455,6 +1496,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lu3"
+                      data-side="top"
                     >
                       lu3
                     </span>
@@ -1476,6 +1518,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="ld1"
+                      data-side="bottom"
                     >
                       ld1
                     </span>
@@ -1487,6 +1530,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="ld2"
+                      data-side="bottom"
                     >
                       ld2
                     </span>
@@ -1498,6 +1542,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="ld3"
+                      data-side="bottom"
                     >
                       ld3
                     </span>
@@ -1519,6 +1564,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsu1"
+                      data-side="lside"
                     >
                       lsu1
                     </span>
@@ -1530,6 +1576,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsu2"
+                      data-side="lside"
                     >
                       lsu2
                     </span>
@@ -1541,6 +1588,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsu3"
+                      data-side="lside"
                     >
                       lsu3
                     </span>
@@ -1552,6 +1600,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsm1"
+                      data-side="lside"
                     >
                       lsm1
                     </span>
@@ -1563,6 +1612,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsm2"
+                      data-side="lside"
                     >
                       lsm2
                     </span>
@@ -1574,6 +1624,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsm3"
+                      data-side="lside"
                     >
                       lsm3
                     </span>
@@ -1585,6 +1636,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsd1"
+                      data-side="lside"
                     >
                       lsd1
                     </span>
@@ -1596,6 +1648,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsd2"
+                      data-side="lside"
                     >
                       lsd2
                     </span>
@@ -1607,6 +1660,7 @@ const MainGame = () => {
                         leftBoxesRef.current.push(el)
                       }
                       data-position="lsd3"
+                      data-side="lside"
                     >
                       lsd3
                     </span>

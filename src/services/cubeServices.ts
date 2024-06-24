@@ -23,7 +23,7 @@ class CubeServices {
   }
 
   updateGame(gameInfo: Omit<GameInfoInt, "startedAt" | "isDone">) {
-    console.log(gameInfo);
+    // console.log(gameInfo);
     const docRef = doc(db, `players/${gameInfo.uid}/games/${gameInfo.id}`);
 
     return updateDoc(docRef, gameInfo);

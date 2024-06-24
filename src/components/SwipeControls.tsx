@@ -64,8 +64,6 @@ const SwipeControls: FC<SwipeControlsInt> = ({
     const target = e.target as HTMLElement;
 
     if (target.classList.contains("rot_point")) {
-      console.log("DOWN");
-
       const position = target.dataset.side;
 
       if (position === "top") {

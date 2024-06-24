@@ -13,7 +13,30 @@ const useHooks = () => {
       }
     }
   };
-  return { showCube };
+
+  // * checkCube will only run for vertCube
+  const checkCube = (allBoxes: HTMLElement[]) => {
+    const getBoxes = (id: string): HTMLElement[] =>
+      allBoxes.filter((box) => box.dataset.side === id);
+
+    const faceBoxes = getBoxes("face");
+    const backBoxes = getBoxes("back");
+    const topBoxes = getBoxes("top");
+    const bottomBoxes = getBoxes("bottom");
+    const rightBoxes = getBoxes("rside");
+    const leftBoxes = getBoxes("lside");
+
+    console.log({
+      faceBoxes,
+      backBoxes,
+      topBoxes,
+      bottomBoxes,
+      rightBoxes,
+      leftBoxes,
+    });
+  };
+
+  return { showCube, checkCube };
 };
 
 export default useHooks;
