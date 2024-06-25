@@ -26,9 +26,33 @@
     opacity: 0;
     transition: all ease $trans_mid;
 
+    &.loading_failed {
+      @include flex(center, center, column);
+      gap: 15px;
+      font-family: $fnt_spc;
+      letter-spacing: 0.2rem;
+      color: #ff7575;
+    }
+
     &.active {
       opacity: 1;
-      z-index: 1;
+      z-index: 5;
+    }
+
+    a {
+      font-size: 1.5rem;
+      letter-spacing: 0.1rem;
+      box-shadow: 2px 2px 5px #000714, -2px -2px 5px #003083b5;
+      padding: 5px 20px;
+      border-radius: 5px;
+      background: linear-gradient(120deg, #003083b5, #000714);
+      font-family: $fnt_spc;
+      color: $clr_fnt;
+
+      &:not(&:disabled):active {
+        background: linear-gradient(-120deg, #003083b5, #000714);
+        box-shadow: inset 2px 2px 5px #000714, inset -2px -2px 5px #003083b5;
+      }
     }
   }
 
@@ -117,13 +141,14 @@
 
     .cube_view {
       --cube_dim: 13px;
-      width: 50%;
+      width: 30%;
       height: var(--cube_dim);
       margin-inline: auto;
       transform: translateY(8vh);
       position: relative;
       @include flex(center, center);
       gap: 10px;
+      min-width: fit-content;
 
       .view_cube {
         transform-style: preserve-3d;
@@ -233,6 +258,10 @@
         opacity: 1;
       }
 
+      &.anim {
+        animation: rotateCube 5s linear infinite;
+      }
+
       .box {
         position: relative;
         background-color: #fff;
@@ -259,9 +288,7 @@
 
     .vert_cube {
       transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg);
-      // transition: all ease 3s;
       transform-style: preserve-3d;
-      // animation: verAnim 10s ease infinite;
 
       // !For Debugging
       // transform: translate(-20%, 0%) rotateY(-350deg) rotateX(-20deg);
@@ -303,7 +330,6 @@
 
         &.right_cube {
           right: 0;
-          // animation: verRotateAnim 5s ease-in-out infinite;
 
           &:before {
             content: "";
@@ -327,7 +353,6 @@
 
         &.left_cube {
           left: 0;
-          // animation: verRotateAnim 3s ease-in-out 0.5s infinite;
 
           &:before {
             content: "";
@@ -411,9 +436,7 @@
 
     .hor_cube {
       transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg);
-      // transition: all ease 3s;
       transform-style: preserve-3d;
-      // animation: horAnim 10s linear infinite;
 
       // ! For Debugging
       // transform: translate(-50%, -50%) rotateY(-350deg) rotateX(-20deg);
@@ -428,8 +451,6 @@
 
         &.top_cube {
           top: 0;
-
-          // animation: horRotateAnim 3s linear infinite;
 
           &:before {
             content: "";
@@ -480,7 +501,6 @@
 
         &.bottom_cube {
           bottom: 0;
-          // animation: horRotateAnim 5s linear 0.5s infinite;
 
           &:before {
             content: "";
@@ -585,7 +605,7 @@
       @include biTranslate(-50%, -50%);
       width: calc(1.2 * var(--cube_width));
       aspect-ratio: 1/1.8;
-      z-index: 2;
+      // z-index: 2;
 
       .pos_wrapper {
         position: absolute;
@@ -723,46 +743,44 @@
       }
     }
   }
-}
 
-@keyframes horAnim {
-  from {
-    transform: translate(-50%, -50%) rotateY(0deg) rotateX(60deg) rotateZ(0deg);
-  }
+  .complete_wrapper {
+    @include overlayPos(fixed);
+    backdrop-filter: blur(10px);
+    background-color: #00000006;
+    @include flex(center, center);
+    z-index: -1;
+    opacity: 0;
+    pointer-events: none;
+    scale: 0.5;
+    transition: opacity ease $trans_mid, scale ease $trans_mid;
 
-  to {
-    transform: translate(-50%, -50%) rotateY(360deg) rotateX(420deg)
-      rotateZ(360deg);
-  }
-}
+    &.active {
+      z-index: 1;
+      opacity: 1;
+      pointer-events: auto;
+      scale: 1;
+    }
 
-@keyframes horRotateAnim {
-  from {
-    transform: rotateY(45deg);
-  }
-  to {
-    transform: rotateY(405deg);
-  }
-}
-
-@keyframes verAnim {
-  from {
-    transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg)
-      rotateZ(0deg);
-  }
-
-  to {
-    transform: translate(-50%, -50%) rotateY(340deg) rotateX(340deg)
-      rotateZ(360deg);
+    video {
+      width: 100%;
+      height: 100%;
+      object-fit: cover;
+      opacity: 0.5;
+      @include overlayPos(absolute);
+    }
   }
 }
 
-@keyframes verRotateAnim {
-  from {
-    transform: rotateX(45deg);
+@keyframes rotateCube {
+  0% {
+    transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg);
   }
-  to {
-    transform: rotateX(405deg);
+  50% {
+    transform: translate(-50%, -50%) rotateY(340deg) rotateX(-20deg);
+  }
+  100%{
+    transform: translate(-50%, -50%) rotateY(340deg) rotateX(340deg);
   }
 }
 

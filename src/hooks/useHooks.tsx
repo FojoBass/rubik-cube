@@ -73,7 +73,9 @@ const useHooks = () => {
       runCheck(rightBoxes, "rside") &&
       runCheck(leftBoxes, "lside")
     )
-      dispatch(setIsComplete(true));
+      setTimeout(() => {
+        dispatch(setIsComplete(true));
+      }, 500);
     else console.log("Not solved yet bro!");
   };
 

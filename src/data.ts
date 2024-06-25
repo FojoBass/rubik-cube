@@ -24,6 +24,15 @@ const pauseMenu: { title: string; link?: string }[] = [
 
 const settingsOpts = ["Sound", "Controls"];
 
+const tipsOpts = [
+  "Control type can be changed in settings",
+  "Use the four little cube buttons to change cube view",
+  "Rotate the cube with the button below it",
+  "Game is saved every 20 seconds (if move is made)",
+  "Save game manually using save button ar the top right corner",
+  "Save player id to continue from last saved point",
+];
+
 export {
   music1,
   music2,
@@ -34,4 +43,5 @@ export {
   keyboardSfx,
   pauseMenu,
   settingsOpts,
+  tipsOpts,
 };

@@ -1,5 +1,6 @@
 import SectionTemplate from "../templates/SectionTemplate";
 import {
+  ConfirmKeys,
   ControlType,
   CubeEnum,
   CubeInt,
@@ -25,28 +26,30 @@ import {
   getPlayer,
   updateGame,
 } from "../app/features/cubeAsyncThunk";
-import { useLocation } from "react-router-dom";
+import { Link, useLocation } from "react-router-dom";
 import { useRecon } from "../hooks/useRecon";
 import { acceptSfx, clickSfx } from "../data";
 import useSfx from "../hooks/useSfx";
 import BtnControls from "../components/BtnControls";
 import SwipeControls from "../components/SwipeControls";
 import { TbRotate3D } from "react-icons/tb";
+import GameComplete from "../modals/GameComplete";
 
-// todo Save Settings in user store
+const randomizerCount = 1;
+// todo Work on start up new game after complete game, or if user info exist but no game with isDone: false
 
 const MainGame = () => {
   const {
     playerInfo,
     saving,
-    // savingFailed,
-    // savingSuccess,
     error,
     fetchingGameFailed,
     fetchingGameSuccess,
     fetchingPlayerFailed,
     fetchingPlayerSuccess,
     gameInfo,
+    isComplete,
+    noActiveGame,
   } = useCubeSelector((state) => state.cube);
   const {
     musicRefs,
@@ -63,6 +66,7 @@ const MainGame = () => {
     controlType,
     cubeView,
     setCubeView,
+    setConfirmTarget,
   } = useCubeContext();
   const rightCubeRef = useRef<HTMLDivElement | null>(null);
   const leftCubeRef = useRef<HTMLDivElement | null>(null);
@@ -92,8 +96,7 @@ const MainGame = () => {
   const durationRef = useRef(0);
   const dispatch = useCubeDispatch();
   const {
-    // resetSavingFailed,
-    // resetSavingSuccess,
+    setIsComplete,
     resetFetchingGameFailed,
     resetFetchingGameSuccess,
     resetFetchingPlayerFailed,
@@ -124,6 +127,7 @@ const MainGame = () => {
   const iniX = useRef(0);
   const iniY = useRef(0);
   const rotateBtnRef = useRef<HTMLButtonElement | null>(null);
+  const [isTips, setIsTips] = useState(true);
 
   const handleViewChange = (el: HTMLElement, y: number, x: number) => {
     el.style.transform = `translate(-50%, -50%) rotateY(${y}deg) rotateX(${x}deg)`;
@@ -147,12 +151,14 @@ const MainGame = () => {
   };
 
   const playRand = (musicArr: HTMLAudioElement[]) => {
-    const randInd = genRandomNum(musicArr.length);
-    musicArr[randInd].play();
-    musicArr[randInd].onended = () => {
-      musicArr[randInd].onended = null;
-      playRand(musicArr);
-    };
+    if (!isComplete) {
+      const randInd = genRandomNum(musicArr.length);
+      musicArr[randInd].play();
+      musicArr[randInd].onended = () => {
+        musicArr[randInd].onended = null;
+        playRand(musicArr);
+      };
+    }
   };
 
   const randomizer = (
@@ -262,12 +268,18 @@ const MainGame = () => {
     ];
   };
 
-  const saveGameInfo = async (isFirst: boolean = false) => {
+  const saveGameInfo = async (
+    isFirst: boolean = false,
+    isDone: boolean = false
+  ) => {
     const uid = new ShortUniqueId({ length: 10 });
 
     if (playerInfo) {
       if (isFirst) {
-        const id = gameInfo?.id || uid.randomUUID();
+        const id =
+          isReset && isComplete
+            ? uid.randomUUID()
+            : gameInfo?.id || uid.randomUUID();
         const newGameInfo: GameInfoInt = {
           id,
           startedAt: serverTimestamp(),
@@ -287,6 +299,21 @@ const MainGame = () => {
         setGameLoading(false);
         setIsPlay && setIsPlay(true);
         setIsChanges(false);
+      } else if (isDone) {
+        const updateInfo: Omit<GameInfoInt, "startedAt"> = {
+          duration: durationRef.current,
+          moves,
+          updatedAt: serverTimestamp(),
+          uid: playerInfo.uid,
+          id: gameInfo?.id ?? "",
+          cubes: {
+            left: prepCubes(CubeEnum.l),
+            right: prepCubes(CubeEnum.r),
+            center: prepCubes(CubeEnum.c),
+          },
+          isDone: true,
+        };
+        dispatch(updateGame(updateInfo));
       } else {
         const updateInfo: Omit<GameInfoInt, "startedAt" | "isDone"> = {
           duration: durationRef.current,
@@ -441,11 +468,11 @@ const MainGame = () => {
           });
       }
     }
-  }, [playerInfo]);
+  }, [playerInfo, isComplete]);
 
   // ?Set all colors to the corresponding side
   useEffect(() => {
-    if (playerInfo && isFormEntry) {
+    if (playerInfo && (isFormEntry || isReset) && !isClrsSet) {
       const faceEls = facesRef.current;
       const backEls = backsRef.current;
       const topEls = topsRef.current;
@@ -474,17 +501,19 @@ const MainGame = () => {
           setIsClrsSet(true);
         })();
       }
-
-      setIsFormEntry && setIsFormEntry(false);
     }
-  }, [playerInfo, isFormEntry, isNew, isContinue]);
+  }, [playerInfo, isFormEntry, isNew, isContinue, isReset]);
 
   // ? Scramble cube
   useEffect(() => {
     const vertCubeEl = vertCubeRef.current;
     const horCubeEl = horCubeRef.current;
 
-    if (isClrsSet && vertCubeEl && horCubeEl) {
+    console.log({ isClrsSet, isFormEntry });
+
+    if (isClrsSet && isFormEntry && vertCubeEl && horCubeEl) {
+      console.log("in clrset block");
+
       (async () => {
         const cubes: CubeEnum[] = [
           CubeEnum.r,
@@ -493,7 +522,7 @@ const MainGame = () => {
           CubeEnum.b,
         ];
 
-        for (let i = 0; i < 1; i++) {
+        for (let i = 0; i < randomizerCount; i++) {
           const ind = genRandomNum(cubes.length);
           const cube = cubes[ind];
           const isClock = !!genRandomNum(2);
@@ -503,8 +532,10 @@ const MainGame = () => {
 
         saveGameInfo(true);
       })();
+
+      setIsFormEntry && setIsFormEntry(false);
     }
-  }, [isClrsSet]);
+  }, [isClrsSet, isFormEntry]);
 
   // ? Get Player info on reload
   useEffect(() => {
@@ -514,7 +545,7 @@ const MainGame = () => {
     }
   }, [pathname]);
 
-  // ? Get game info after getting player info
+  // ? Get game info after getting player info (For reloads and continue)
   useEffect(() => {
     if (fetchingPlayerSuccess && playerInfo) {
       dispatch(getGameInfo({ uid: playerInfo.uid }));
@@ -534,8 +565,12 @@ const MainGame = () => {
 
   // ? Display game after all reload-fetches
   useEffect(() => {
-    if (fetchingGameSuccess && gameInfo) {
+    if (fetchingGameSuccess && (gameInfo || noActiveGame)) {
       dispatch(resetFetchingGameSuccess());
+      if (noActiveGame) {
+        setOpenModal && setOpenModal({ key: ModalKeys.confirm, state: true });
+        setConfirmTarget && setConfirmTarget(ConfirmKeys.newGame);
+      }
     }
     if (fetchingGameFailed) {
       setGameLoading(false);
@@ -543,7 +578,7 @@ const MainGame = () => {
       dispatch(resetFetchingGameFailed());
       console.error(error);
     }
-  }, [gameInfo, fetchingGameFailed, fetchingGameSuccess]);
+  }, [gameInfo, fetchingGameFailed, fetchingGameSuccess, noActiveGame]);
 
   useEffect(() => {
     if (isReload && gameInfo) {
@@ -605,9 +640,15 @@ const MainGame = () => {
   useEffect(() => {
     const vertCubeEl = vertCubeRef.current;
     const horCubeEl = horCubeRef.current;
-    if (isReset && gameLoading && horCubeEl && vertCubeEl) {
+    console.log("reset: ", isReset);
+
+    if (isReset && gameLoading && isClrsSet && horCubeEl && vertCubeEl) {
+      console.log("I dey inside");
+
       const timer = setTimeout(() => {
         (async () => {
+          console.log("in timeout");
+
           const cubes: CubeEnum[] = [
             CubeEnum.r,
             CubeEnum.l,
@@ -615,7 +656,7 @@ const MainGame = () => {
             CubeEnum.b,
           ];
 
-          for (let i = 0; i < 20; i++) {
+          for (let i = 0; i < randomizerCount; i++) {
             const ind = genRandomNum(cubes.length);
             const cube = cubes[ind];
             const isClock = !!genRandomNum(2);
@@ -625,12 +666,13 @@ const MainGame = () => {
 
           saveGameInfo(true);
           setIsReset && setIsReset(false);
+          isComplete && dispatch(setIsComplete(false));
         })();
       }, 500);
 
       return () => clearTimeout(timer);
     }
-  }, [gameLoading, isReset]);
+  }, [gameLoading, isReset, isComplete, isClrsSet]);
 
   // ? View Change
   useEffect(() => {
@@ -732,7 +774,14 @@ const MainGame = () => {
       removeEventListener("pointermove", handlePointerMove);
       removeEventListener("pointerup", handlePointerUp);
     };
-  }, [cubeView]);
+  }, [cubeView, horCubeRef.current, vertCubeRef.current]);
+
+  useEffect(() => {
+    if (isComplete) {
+      saveGameInfo(false, true);
+      setIsPlay && setIsPlay(false);
+    }
+  }, [isComplete]);
 
   return (
     <SectionTemplate id={Section.main}>
@@ -752,6 +801,9 @@ const MainGame = () => {
               }`}
             >
               Loading failed!
+              <Link to="/" onPointerDown={() => playSfx(acceptSfx)}>
+                Menu
+              </Link>
             </div>
 
             <nav className="navsect">
@@ -874,7 +926,10 @@ const MainGame = () => {
                 </button>
               </div>
 
-              <div className="cube vert_cube active" ref={vertCubeRef}>
+              <div
+                className={`cube vert_cube active ${isComplete ? "anim" : ""}`}
+                ref={vertCubeRef}
+              >
                 <div className="sub_cube right_cube" ref={rightCubeRef}>
                   <div
                     className="face"
@@ -1670,7 +1725,10 @@ const MainGame = () => {
                 </div>
               </div>
 
-              <div className="cube hor_cube " ref={horCubeRef}>
+              <div
+                className={`cube hor_cube ${isComplete ? "anim" : ""}`}
+                ref={horCubeRef}
+              >
                 <div className="sub_cube top_cube" ref={topCubeRef}>
                   <div
                     className="top"
@@ -2416,6 +2474,8 @@ const MainGame = () => {
                 <TbRotate3D />
               </button>
             </main>
+
+            <GameComplete />
           </>
         ) : (
           <GameForm />

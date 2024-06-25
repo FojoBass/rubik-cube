@@ -4,11 +4,13 @@ import useSfx from "../hooks/useSfx";
 import { useCubeContext } from "../contexts/cubeContext";
 import { MouseEventHandler, useEffect } from "react";
 import { ConfirmKeys, ModalKeys } from "../types";
+import { useCubeSelector } from "../app/store";
 
 const PauseGame = () => {
   const { playSfx } = useSfx();
   const { setOpenModal, setIsPlay, isPlay, openModal, setConfirmTarget } =
     useCubeContext();
+  const { playerInfo } = useCubeSelector((state) => state.cube);
 
   const handleClick: MouseEventHandler = (e) => {
     const text = e.currentTarget.textContent;
@@ -62,6 +64,7 @@ const PauseGame = () => {
           </button>
         )
       )}
+      <p className="id">ID: {playerInfo?.uid}</p>
     </div>
   );
 };

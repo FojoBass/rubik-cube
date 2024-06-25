@@ -51,6 +51,7 @@ interface CubeContextInt {
   setControlType?: Dispatch<SetStateAction<ControlType>>;
   cubeView?: CubeView;
   setCubeView?: Dispatch<SetStateAction<CubeView>>;
+  firstEntry?: boolean;
 }
 
 const CubeContext = createContext<CubeContextInt>({});
@@ -150,6 +151,7 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
     setControlType,
     cubeView,
     setCubeView,
+    firstEntry,
   };
 
   return (

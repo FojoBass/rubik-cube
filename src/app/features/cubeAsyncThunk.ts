@@ -3,9 +3,6 @@ import { GameInfoInt, PlayerInfoInt } from "../../types";
 import { serverTimestamp } from "firebase/firestore";
 import { cubeServices } from "../../services/cubeServices";
 
-// todo Setup congratulatory modal
-// todo remeber to merge branch
-
 // ? Create Player
 export const createPlayer = createAsyncThunk<
   { playerInfo: PlayerInfoInt },
@@ -18,6 +15,7 @@ export const createPlayer = createAsyncThunk<
       avi: payload.aviUrl,
       createdAt: serverTimestamp(),
     };
+
     await cubeServices.createPlayer(playerInfo);
 
     return { playerInfo };
@@ -52,34 +50,36 @@ export const updateGame = createAsyncThunk<
 });
 
 // ? Game Info
-export const getGameInfo = createAsyncThunk<GameInfoInt, { uid: string }>(
-  "getGameInfo",
-  async (payload, thunkApi) => {
-    try {
-      const { uid } = payload;
-      let gameInfo: any;
-      const querySnapshot = await cubeServices.fetchGame(uid);
+export const getGameInfo = createAsyncThunk<
+  GameInfoInt | null,
+  { uid: string }
+>("getGameInfo", async (payload, thunkApi) => {
+  try {
+    const { uid } = payload;
+    let gameInfo: any;
+    const querySnapshot = await cubeServices.fetchGame(uid);
 
-      querySnapshot.forEach((doc) => {
-        gameInfo = doc.data();
-      });
+    querySnapshot.forEach((doc) => {
+      gameInfo = doc.data();
+    });
 
-      console.log({ gameInfo });
+    console.log({ gameInfo });
 
-      return {
-        ...gameInfo,
-        startedAt: gameInfo?.startedAt
-          ? gameInfo.startedAt.toDate().toString()
-          : "",
-        updatedAt: gameInfo?.updatedAt
-          ? gameInfo.updatedAt.toDate().toString()
-          : "",
-      } as GameInfoInt;
-    } catch (err) {
-      return thunkApi.rejectWithValue(err);
-    }
+    return gameInfo
+      ? ({
+          ...gameInfo,
+          startedAt: gameInfo?.startedAt
+            ? gameInfo.startedAt.toDate().toString()
+            : "",
+          updatedAt: gameInfo?.updatedAt
+            ? gameInfo.updatedAt.toDate().toString()
+            : "",
+        } as GameInfoInt)
+      : null;
+  } catch (err) {
+    return thunkApi.rejectWithValue(err);
   }
-);
+});
 
 // ? Get Player
 export const getPlayer = createAsyncThunk<PlayerInfoInt, { uid: string }>(

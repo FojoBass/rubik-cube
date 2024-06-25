@@ -25,6 +25,7 @@ interface InitialStateInt {
   fetchingGameSuccess: boolean;
   fetchingGameFailed: boolean;
   isComplete: boolean;
+  noActiveGame: boolean;
 }
 
 const initialState: InitialStateInt = {
@@ -44,6 +45,7 @@ const initialState: InitialStateInt = {
   fetchingGameSuccess: false,
   fetchingGameFailed: false,
   isComplete: false,
+  noActiveGame: false,
 };
 
 export const cubeSlice = createSlice({
@@ -76,6 +78,13 @@ export const cubeSlice = createSlice({
     },
     setIsComplete(state, action: PayloadAction<boolean>) {
       state.isComplete = action.payload;
+    },
+    resetInfos(state) {
+      state.playerInfo = null;
+      state.gameInfo = null;
+    },
+    resetNoActiveGame(state) {
+      state.noActiveGame = false;
     },
   },
   extraReducers: (builder) => {
@@ -136,10 +145,11 @@ export const cubeSlice = createSlice({
       })
       .addCase(
         getGameInfo.fulfilled,
-        (state, action: PayloadAction<GameInfoInt>) => {
+        (state, action: PayloadAction<GameInfoInt | null>) => {
           state.fetchingGame = false;
           state.gameInfo = action.payload;
           state.fetchingGameSuccess = true;
+          if (!action.payload) state.noActiveGame = true;
         }
       )
       .addCase(getGameInfo.rejected, (state, error) => {

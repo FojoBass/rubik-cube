@@ -6,19 +6,21 @@ import useSfx from "../hooks/useSfx";
 import { clickSfx } from "../data";
 import { Link } from "react-router-dom";
 import ShortUniqueId from "short-unique-id";
+import { useCubeDispatch, useCubeSelector } from "../app/store";
+import { cubeSlice } from "../app/features/cubeSlice";
 
 const uid = new ShortUniqueId({ length: 6 });
 
-const homeOpt: { title: string; path: string }[] = [
-  { title: "new", path: `/g/${uid.randomUUID()}` },
-  { title: "continue", path: "/g/nil" },
-  { title: "hall of fame", path: "/halloffame" },
-  { title: "scores", path: "/scores" },
-  { title: "settings", path: "" },
-  { title: "about", path: "/about" },
-];
-
 const Home = () => {
+  const homeOpt: { title: string; path: string }[] = [
+    { title: "new", path: `/g/${uid.randomUUID()}` },
+    { title: "continue", path: "/g/nil" },
+    // { title: "hall of fame", path: "/halloffame" },
+    // { title: "scores", path: "/scores" },
+    { title: "settings", path: "" },
+    { title: "about", path: "/about" },
+  ];
+
   const {
     musicRefs,
     isChrome,
@@ -27,8 +29,14 @@ const Home = () => {
     setOpenModal,
     isMusic,
     setIsMusic,
+    firstEntry,
   } = useCubeContext();
   const { playSfx } = useSfx();
+  const { isComplete, playerInfo, gameInfo } = useCubeSelector(
+    (state) => state.cube
+  );
+  const { setIsComplete, resetInfos } = cubeSlice.actions;
+  const dispatch = useCubeDispatch();
 
   // !UNCOMMENT THIS OUT WHEN DONE
 
@@ -37,11 +45,14 @@ const Home = () => {
 
     setOpenModal && setOpenModal({ key: "", state: false });
 
+    isComplete && dispatch(setIsComplete(false));
+    (playerInfo || gameInfo) && dispatch(resetInfos());
+
     if ((!isChrome || isMusic) && musicEls?.length) {
       const music1 = musicEls.find((el) => el.id === SoundIds.mus1)!;
       music1.play();
       music1.loop = true;
-    } else if (!isMusic) {
+    } else if (!isMusic && !firstEntry) {
       alert("If no audio, click anywhere on the window to activate it");
 
       const handleClick = (e: MouseEvent) => {
@@ -60,7 +71,9 @@ const Home = () => {
 
       addEventListener("click", handleClick);
     }
-  }, []);
+
+    console.log("firstEntry: ", firstEntry);
+  }, [firstEntry]);
 
   return (
     <SectionTemplate id={Section.home}>

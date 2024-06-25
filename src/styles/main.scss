@@ -70,6 +70,68 @@
   }
 }
 
+// *Confirmation
+.confirm_wrapper {
+  color: $clr_fnt;
+  font-size: 1.5rem;
+
+  &.comp {
+    background-color: #00173fa4;
+    width: 350px;
+    padding: 30px;
+    border-radius: 20px;
+    position: relative;
+  }
+
+  .question {
+    text-align: center;
+    letter-spacing: 0.1rem;
+  }
+
+  .btns_wrapper {
+    @include flex(center, center);
+    margin-top: 20px;
+    gap: 20px;
+
+    button {
+      padding: 5px;
+      position: relative;
+      font-family: $fnt_spc;
+      border-radius: 10px;
+      width: 50px;
+      color: darken($clr_fnt, 40%);
+      box-shadow: 2px 2px 5px #000b1ec8, -2px -2px 5px #6190e0a5;
+      transition: color ease $trans_mid;
+
+      &:hover {
+        color: $clr_fnt;
+      }
+
+      &:active {
+        box-shadow: inset 2px 2px 5px #000b1ec8, inset -2px -2px 5px #6190e0a5;
+      }
+    }
+  }
+}
+// *End Confirmation
+
+#about {
+  @include flex(center, center, column);
+  color: $clr_fnt;
+  font-size: 1.8rem;
+  line-height: 1.5;
+
+  a {
+    text-decoration: underline;
+    transition: all ease $trans_mid;
+
+    &:hover {
+      text-decoration: none;
+      color: $clr_orange;
+    }
+  }
+}
+
 @keyframes cubeRotate {
   from {
     transform: rotateX(0deg) rotateY(0deg);

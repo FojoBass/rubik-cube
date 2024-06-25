@@ -27,11 +27,11 @@ export enum ModalKeys {
   set = "settings",
   setsou = "set_sound",
   setcon = "set_controls",
-  comp = "complete",
 }
 
 export enum ConfirmKeys {
-  res = "reset",
+  res = "Are you sure you want to reset",
+  newGame = "No active game found. Start a new game",
 }
 
 export interface CubeInt {

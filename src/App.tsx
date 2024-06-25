@@ -1,6 +1,5 @@
 import { useEffect, useRef, useState } from "react";
 import About from "./pages/About";
-import HallOfFame from "./pages/HallOfFame";
 import Home from "./pages/Home";
 import bgImg from "./assets/images/bg.png";
 import bgVid from "./assets/videos/rubik_bg.mp4";
@@ -24,7 +23,6 @@ const App = () => {
       <Route path="/" element={<Root />} errorElement={<Error />}>
         <Route index element={<Home />} />
         <Route path="/g/:id" element={<MainGame />} />
-        <Route path="/halloffame" element={<HallOfFame />} />
         <Route path="/about" element={<About />} />
       </Route>
     )

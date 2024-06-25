@@ -192,6 +192,12 @@
     }
   }
 
+  .id {
+    @include position(absolute, top, right, 10px, 10px);
+    font-size: 1.6rem;
+    opacity: 0.7;
+  }
+
   .back_btn {
     @include position(absolute, left, top, 20px, 20px);
     font-size: 1.8rem;
@@ -213,43 +219,6 @@
   }
 }
 // *End Pause Game
-
-// *Confirmation
-.confirm_wrapper {
-  color: $clr_fnt;
-  font-size: 1.5rem;
-
-  .question {
-    text-align: center;
-    letter-spacing: 0.1rem;
-  }
-
-  .btns_wrapper {
-    @include flex(center, center);
-    margin-top: 20px;
-    gap: 20px;
-
-    button {
-      padding: 5px;
-      position: relative;
-      font-family: $fnt_spc;
-      border-radius: 10px;
-      width: 50px;
-      color: darken($clr_fnt, 40%);
-      box-shadow: 2px 2px 5px #000b1ec8, -2px -2px 5px #6190e0a5;
-      transition: color ease $trans_mid;
-
-      &:hover {
-        color: $clr_fnt;
-      }
-
-      &:active {
-        box-shadow: inset 2px 2px 5px #000b1ec8, inset -2px -2px 5px #6190e0a5;
-      }
-    }
-  }
-}
-// *End Confirmation
 
 // *Set Sound
 .settings {
