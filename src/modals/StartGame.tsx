@@ -83,7 +83,7 @@ const StartGame = () => {
     const origSrc = (el.children[0] as HTMLImageElement).src;
     const srcInd = origSrc.includes("src")
       ? origSrc.indexOf("src")
-      : origSrc.indexOf("assests");
+      : origSrc.indexOf("assets");
     const src = (el.children[0] as HTMLImageElement).src.slice(srcInd);
 
     console.log(src, srcInd, el.children[0]);
