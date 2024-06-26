@@ -248,11 +248,6 @@
       opacity: 0;
       transition: transform ease $trans_mid;
 
-      // !For Debuggin
-      // scale: 0.6;
-      // z-index: 1;
-      // opacity: 1;
-
       &.active {
         z-index: 1;
         opacity: 1;
@@ -289,11 +284,6 @@
     .vert_cube {
       transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg);
       transform-style: preserve-3d;
-
-      // !For Debugging
-      // transform: translate(-20%, 0%) rotateY(-350deg) rotateX(-20deg);
-      // left: 0;
-      // top: 10%;
 
       &:before,
       &:after {
@@ -375,7 +365,6 @@
         .bottom {
           display: grid;
           grid-template-columns: 1fr;
-          // gap: 2px;
           @include overlayPos(absolute);
         }
 
@@ -383,7 +372,6 @@
         .left {
           display: grid;
           grid-template-columns: 1fr 1fr 1fr;
-          // gap: 2px;
           width: var(--cube_width);
           height: 100%;
         }
@@ -394,10 +382,6 @@
 
         .back {
           transform: rotateY(180deg) translateZ(calc(var(--cube_width) / 2));
-
-          // .box {
-          //   transform: rotate(180deg);
-          // }
         }
 
         .top {
@@ -437,9 +421,6 @@
     .hor_cube {
       transform: translate(-50%, -50%) rotateY(-20deg) rotateX(-20deg);
       transform-style: preserve-3d;
-
-      // ! For Debugging
-      // transform: translate(-50%, -50%) rotateY(-350deg) rotateX(-20deg);
 
       .sub_cube {
         width: 100%;
@@ -605,7 +586,6 @@
       @include biTranslate(-50%, -50%);
       width: calc(1.2 * var(--cube_width));
       aspect-ratio: 1/1.8;
-      // z-index: 2;
 
       .pos_wrapper {
         position: absolute;
@@ -729,7 +709,7 @@
           .rot_point {
             aspect-ratio: 1/1;
             width: calc(var(--cube_width) / 3);
-            opacity: 0.5;
+            opacity: 0.3;
             cursor: auto;
             color: #000;
             transition: opacity ease $trans_fast;
@@ -779,7 +759,7 @@
   50% {
     transform: translate(-50%, -50%) rotateY(340deg) rotateX(-20deg);
   }
-  100%{
+  100% {
     transform: translate(-50%, -50%) rotateY(340deg) rotateX(340deg);
   }
 }

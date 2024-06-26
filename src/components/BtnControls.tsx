@@ -1,10 +1,4 @@
 import { Dispatch, FC, SetStateAction, useEffect, useRef } from "react";
-// import {
-//   MdOutlineArrowForward,
-//   MdArrowUpward,
-//   MdOutlineArrowDownward,
-//   MdOutlineArrowBack,
-// } from "react-icons/md";
 import useSfx from "../hooks/useSfx";
 import { clickSfx } from "../data";
 import { CubeEnum } from "../types";

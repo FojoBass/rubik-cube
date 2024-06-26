@@ -78,8 +78,6 @@ export const Cube = () => {
 
   const smlCubeRef = useRef<HTMLDivElement>(null);
 
-  // todo Factor in height of boxes to prevent them entering the bounds
-
   const setCubePos = (el: HTMLDivElement, x: number, y: number) => {
     el.style.top = y + "%";
     el.style.left = x + "%";

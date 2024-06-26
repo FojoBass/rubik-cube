@@ -19,6 +19,7 @@ const Confirmations = () => {
       case ConfirmKeys.res:
         setIsReset && setIsReset(true);
         setConfirmTarget && setConfirmTarget("");
+
         break;
       case ConfirmKeys.newGame:
         setIsReset && setIsReset(true);

@@ -52,6 +52,8 @@ interface CubeContextInt {
   cubeView?: CubeView;
   setCubeView?: Dispatch<SetStateAction<CubeView>>;
   firstEntry?: boolean;
+  setIsTips?: Dispatch<SetStateAction<boolean>>;
+  isTips?: boolean;
 }
 
 const CubeContext = createContext<CubeContextInt>({});
@@ -80,6 +82,7 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
     navigator.maxTouchPoints > 1 ? ControlType.s : ControlType.bt
   );
   const [cubeView, setCubeView] = useState<CubeView>(CubeView.ufr);
+  const [isTips, setIsTips] = useState(true);
 
   useEffect(() => {
     const musicEls = musicRefs.current;
@@ -152,6 +155,8 @@ export const CubeProvider = ({ children }: { children: ReactNode }) => {
     cubeView,
     setCubeView,
     firstEntry,
+    isTips,
+    setIsTips,
   };
 
   return (

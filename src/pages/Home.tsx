@@ -38,8 +38,6 @@ const Home = () => {
   const { setIsComplete, resetInfos } = cubeSlice.actions;
   const dispatch = useCubeDispatch();
 
-  // !UNCOMMENT THIS OUT WHEN DONE
-
   useEffect(() => {
     const musicEls = musicRefs?.current;
 
@@ -71,8 +69,6 @@ const Home = () => {
 
       addEventListener("click", handleClick);
     }
-
-    console.log("firstEntry: ", firstEntry);
   }, [firstEntry]);
 
   return (

@@ -76,7 +76,6 @@ const useHooks = () => {
       setTimeout(() => {
         dispatch(setIsComplete(true));
       }, 500);
-    else console.log("Not solved yet bro!");
   };
 
   return { showCube, checkCube };

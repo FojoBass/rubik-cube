@@ -36,8 +36,6 @@ const Root = () => {
   const vidRef = useRef<HTMLVideoElement>(null);
   const { pathname } = useLocation();
 
-  // todo Set a loading state, until img bg and audios are loaded before loading can be removed
-
   useEffect(() => {
     const vidEl = vidRef.current;
 

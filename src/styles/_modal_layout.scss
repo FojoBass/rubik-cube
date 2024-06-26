@@ -9,6 +9,10 @@
   @include flex(center, center);
   backdrop-filter: blur(10px);
 
+  &:has(.modal_opts_wrapper.confirm_wrapper) {
+    backdrop-filter: unset;
+  }
+
   &.active {
     z-index: 1000;
     opacity: 1;
@@ -20,6 +24,10 @@
     padding: 30px;
     border-radius: 20px;
     position: relative;
+
+    &:has(.modal_opts_wrapper.confirm_wrapper) {
+      backdrop-filter: blur(10px);
+    }
   }
 }
 
@@ -340,5 +348,26 @@
     }
   }
 }
-
 // *End Set Sound
+
+// *Tips
+.tips_wrapper {
+  height: 40px;
+  width: 100%;
+  position: relative;
+
+  p {
+    @include overlayPos(absolute);
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity ease $trans_mid;
+    text-align: center;
+    font-size: 1.8rem;
+
+    &.active {
+      opacity: 1;
+      pointer-events: auto;
+    }
+  }
+}
+// *End Tips

@@ -35,8 +35,7 @@ import SwipeControls from "../components/SwipeControls";
 import { TbRotate3D } from "react-icons/tb";
 import GameComplete from "../modals/GameComplete";
 
-const randomizerCount = 1;
-// todo Work on start up new game after complete game, or if user info exist but no game with isDone: false
+const randomizerCount = 20;
 
 const MainGame = () => {
   const {
@@ -67,6 +66,7 @@ const MainGame = () => {
     cubeView,
     setCubeView,
     setConfirmTarget,
+    isTips,
   } = useCubeContext();
   const rightCubeRef = useRef<HTMLDivElement | null>(null);
   const leftCubeRef = useRef<HTMLDivElement | null>(null);
@@ -127,7 +127,6 @@ const MainGame = () => {
   const iniX = useRef(0);
   const iniY = useRef(0);
   const rotateBtnRef = useRef<HTMLButtonElement | null>(null);
-  const [isTips, setIsTips] = useState(true);
 
   const handleViewChange = (el: HTMLElement, y: number, x: number) => {
     el.style.transform = `translate(-50%, -50%) rotateY(${y}deg) rotateX(${x}deg)`;
@@ -365,14 +364,12 @@ const MainGame = () => {
 
   const resetRotate = (cubeEl: HTMLElement, rotDir: "x" | "y"): 0 => {
     cubeEl.ontransitionend = () => {
-      // setIsDisableControls && setIsDisableControls(true);
       cubeEl.style.transition = "unset";
       cubeEl.style.transform =
         rotDir === "x" ? `rotateX(0deg)` : `rotateY(0deg)`;
       setTimeout(() => {
         cubeEl.style.transition = "all ease 0.5s";
         cubeEl.ontransitionend = null;
-        // setIsDisableControls && setIsDisableControls(false);
       }, 600);
     };
 
@@ -509,11 +506,7 @@ const MainGame = () => {
     const vertCubeEl = vertCubeRef.current;
     const horCubeEl = horCubeRef.current;
 
-    console.log({ isClrsSet, isFormEntry });
-
     if (isClrsSet && isFormEntry && vertCubeEl && horCubeEl) {
-      console.log("in clrset block");
-
       (async () => {
         const cubes: CubeEnum[] = [
           CubeEnum.r,
@@ -640,15 +633,10 @@ const MainGame = () => {
   useEffect(() => {
     const vertCubeEl = vertCubeRef.current;
     const horCubeEl = horCubeRef.current;
-    console.log("reset: ", isReset);
 
     if (isReset && gameLoading && isClrsSet && horCubeEl && vertCubeEl) {
-      console.log("I dey inside");
-
       const timer = setTimeout(() => {
         (async () => {
-          console.log("in timeout");
-
           const cubes: CubeEnum[] = [
             CubeEnum.r,
             CubeEnum.l,
@@ -782,6 +770,16 @@ const MainGame = () => {
       setIsPlay && setIsPlay(false);
     }
   }, [isComplete]);
+
+  useEffect(() => {
+    if (isTips && !gameLoading && !isLoadingFailed) {
+      setIsPlay && setIsPlay(false);
+      setOpenModal && setOpenModal({ key: ModalKeys.tips, state: true });
+    } else if (!isTips && !gameLoading && !isLoadingFailed) {
+      setIsPlay && setIsPlay(true);
+      setOpenModal && setOpenModal({ key: "", state: false });
+    }
+  }, [isTips, gameLoading, isLoadingFailed]);
 
   return (
     <SectionTemplate id={Section.main}>
@@ -948,9 +946,7 @@ const MainGame = () => {
                       }
                       data-position="rf1"
                       data-side="face"
-                    >
-                      rf1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -960,9 +956,7 @@ const MainGame = () => {
                       }
                       data-position="rf2"
                       data-side="face"
-                    >
-                      rf2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -972,9 +966,7 @@ const MainGame = () => {
                       }
                       data-position="rf3"
                       data-side="face"
-                    >
-                      rf3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -994,9 +986,7 @@ const MainGame = () => {
                       }
                       data-position="rb1"
                       data-side="back"
-                    >
-                      rb1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1006,9 +996,7 @@ const MainGame = () => {
                       }
                       data-position="rb2"
                       data-side="back"
-                    >
-                      rb2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1018,9 +1006,7 @@ const MainGame = () => {
                       }
                       data-position="rb3"
                       data-side="back"
-                    >
-                      rb3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1040,9 +1026,7 @@ const MainGame = () => {
                       }
                       data-position="ru1"
                       data-side="top"
-                    >
-                      ru1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1052,9 +1036,7 @@ const MainGame = () => {
                       }
                       data-position="ru2"
                       data-side="top"
-                    >
-                      ru2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1064,9 +1046,7 @@ const MainGame = () => {
                       }
                       data-position="ru3"
                       data-side="top"
-                    >
-                      ru3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1086,9 +1066,7 @@ const MainGame = () => {
                       }
                       data-position="rd1"
                       data-side="bottom"
-                    >
-                      rd1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1098,9 +1076,7 @@ const MainGame = () => {
                       }
                       data-position="rd2"
                       data-side="bottom"
-                    >
-                      rd2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1110,9 +1086,7 @@ const MainGame = () => {
                       }
                       data-position="rd3"
                       data-side="bottom"
-                    >
-                      rd3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1132,9 +1106,7 @@ const MainGame = () => {
                       }
                       data-position="rsu1"
                       data-side="rside"
-                    >
-                      rsu1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1144,9 +1116,7 @@ const MainGame = () => {
                       }
                       data-position="rsu2"
                       data-side="rside"
-                    >
-                      rsu2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1156,9 +1126,7 @@ const MainGame = () => {
                       }
                       data-position="rsu3"
                       data-side="rside"
-                    >
-                      rsu3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1168,9 +1136,7 @@ const MainGame = () => {
                       }
                       data-position="rsm1"
                       data-side="rside"
-                    >
-                      rsm1
-                    </span>
+                    ></span>
                     <span
                       className="box center"
                       ref={(el) =>
@@ -1180,9 +1146,7 @@ const MainGame = () => {
                       }
                       data-position="rsm2"
                       data-side="rside"
-                    >
-                      rsm2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1192,9 +1156,7 @@ const MainGame = () => {
                       }
                       data-position="rsm3"
                       data-side="rside"
-                    >
-                      rsm3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1204,9 +1166,7 @@ const MainGame = () => {
                       }
                       data-position="rsd1"
                       data-side="rside"
-                    >
-                      rsd1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1216,9 +1176,7 @@ const MainGame = () => {
                       }
                       data-position="rsd2"
                       data-side="rside"
-                    >
-                      rsd2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1228,9 +1186,7 @@ const MainGame = () => {
                       }
                       data-position="rsd3"
                       data-side="rside"
-                    >
-                      rsd3
-                    </span>
+                    ></span>
                   </div>
                 </div>
 
@@ -1252,9 +1208,7 @@ const MainGame = () => {
                       }
                       data-position="cf1"
                       data-side="face"
-                    >
-                      cf1
-                    </span>
+                    ></span>
                     <span
                       className="box center"
                       ref={(el) =>
@@ -1264,9 +1218,7 @@ const MainGame = () => {
                       }
                       data-position="cf2"
                       data-side="face"
-                    >
-                      cf2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1276,9 +1228,7 @@ const MainGame = () => {
                       }
                       data-position="cf3"
                       data-side="face"
-                    >
-                      cf3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1298,9 +1248,7 @@ const MainGame = () => {
                       }
                       data-position="cb1"
                       data-side="back"
-                    >
-                      cb1
-                    </span>
+                    ></span>
                     <span
                       className="box center"
                       ref={(el) =>
@@ -1310,9 +1258,7 @@ const MainGame = () => {
                       }
                       data-position="cb2"
                       data-side="back"
-                    >
-                      cb2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1322,9 +1268,7 @@ const MainGame = () => {
                       }
                       data-position="cb3"
                       data-side="back"
-                    >
-                      cb3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1344,9 +1288,7 @@ const MainGame = () => {
                       }
                       data-position="cu1"
                       data-side="top"
-                    >
-                      cu1
-                    </span>
+                    ></span>
                     <span
                       className="box center"
                       ref={(el) =>
@@ -1356,9 +1298,7 @@ const MainGame = () => {
                       }
                       data-position="cu2"
                       data-side="top"
-                    >
-                      cu2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1368,9 +1308,7 @@ const MainGame = () => {
                       }
                       data-position="cu3"
                       data-side="top"
-                    >
-                      cu3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1390,9 +1328,7 @@ const MainGame = () => {
                       }
                       data-position="cd1"
                       data-side="bottom"
-                    >
-                      cd1
-                    </span>
+                    ></span>
                     <span
                       className="box center"
                       ref={(el) =>
@@ -1402,9 +1338,7 @@ const MainGame = () => {
                       }
                       data-position="cd2"
                       data-side="bottom"
-                    >
-                      cd2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1414,9 +1348,7 @@ const MainGame = () => {
                       }
                       data-position="cd3"
                       data-side="bottom"
-                    >
-                      cd3
-                    </span>
+                    ></span>
                   </div>
                 </div>
 
@@ -1438,9 +1370,7 @@ const MainGame = () => {
                       }
                       data-position="lf1"
                       data-side="face"
-                    >
-                      lf1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1450,9 +1380,7 @@ const MainGame = () => {
                       }
                       data-position="lf2"
                       data-side="face"
-                    >
-                      lf2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1462,9 +1390,7 @@ const MainGame = () => {
                       }
                       data-position="lf3"
                       data-side="face"
-                    >
-                      lf3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1484,9 +1410,7 @@ const MainGame = () => {
                       }
                       data-position="lb1"
                       data-side="back"
-                    >
-                      lb1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1496,9 +1420,7 @@ const MainGame = () => {
                       }
                       data-position="lb2"
                       data-side="back"
-                    >
-                      lb2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1508,9 +1430,7 @@ const MainGame = () => {
                       }
                       data-position="lb3"
                       data-side="back"
-                    >
-                      lb3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1530,9 +1450,7 @@ const MainGame = () => {
                       }
                       data-position="lu1"
                       data-side="top"
-                    >
-                      lu1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1542,9 +1460,7 @@ const MainGame = () => {
                       }
                       data-position="lu2"
                       data-side="top"
-                    >
-                      lu2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1554,9 +1470,7 @@ const MainGame = () => {
                       }
                       data-position="lu3"
                       data-side="top"
-                    >
-                      lu3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1576,9 +1490,7 @@ const MainGame = () => {
                       }
                       data-position="ld1"
                       data-side="bottom"
-                    >
-                      ld1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1588,9 +1500,7 @@ const MainGame = () => {
                       }
                       data-position="ld2"
                       data-side="bottom"
-                    >
-                      ld2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1600,9 +1510,7 @@ const MainGame = () => {
                       }
                       data-position="ld3"
                       data-side="bottom"
-                    >
-                      ld3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1622,9 +1530,7 @@ const MainGame = () => {
                       }
                       data-position="lsu1"
                       data-side="lside"
-                    >
-                      lsu1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1634,9 +1540,7 @@ const MainGame = () => {
                       }
                       data-position="lsu2"
                       data-side="lside"
-                    >
-                      lsu2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1646,9 +1550,7 @@ const MainGame = () => {
                       }
                       data-position="lsu3"
                       data-side="lside"
-                    >
-                      lsu3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1658,9 +1560,7 @@ const MainGame = () => {
                       }
                       data-position="lsm1"
                       data-side="lside"
-                    >
-                      lsm1
-                    </span>
+                    ></span>
                     <span
                       className="box center"
                       ref={(el) =>
@@ -1670,9 +1570,7 @@ const MainGame = () => {
                       }
                       data-position="lsm2"
                       data-side="lside"
-                    >
-                      lsm2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1682,9 +1580,7 @@ const MainGame = () => {
                       }
                       data-position="lsm3"
                       data-side="lside"
-                    >
-                      lsm3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1694,9 +1590,7 @@ const MainGame = () => {
                       }
                       data-position="lsd1"
                       data-side="lside"
-                    >
-                      lsd1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1706,9 +1600,7 @@ const MainGame = () => {
                       }
                       data-position="lsd2"
                       data-side="lside"
-                    >
-                      lsd2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1718,9 +1610,7 @@ const MainGame = () => {
                       }
                       data-position="lsd3"
                       data-side="lside"
-                    >
-                      lsd3
-                    </span>
+                    ></span>
                   </div>
                 </div>
               </div>
@@ -1746,9 +1636,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utl1"
-                    >
-                      utl1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1757,9 +1645,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utc1"
-                    >
-                      utc1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1768,9 +1654,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utr1"
-                    >
-                      utr1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1779,9 +1663,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utl2"
-                    >
-                      utl2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1790,9 +1672,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utc2"
-                    >
-                      utc2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1801,9 +1681,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utr2"
-                    >
-                      utr2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1812,9 +1690,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utl3"
-                    >
-                      utl3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1823,9 +1699,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utc3"
-                    >
-                      utc3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1834,9 +1708,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="utr3"
-                    >
-                      utr3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1855,9 +1727,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="uf1"
-                    >
-                      uf1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1866,9 +1736,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="uf2"
-                    >
-                      uf2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1877,9 +1745,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="uf3"
-                    >
-                      uf3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1898,9 +1764,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ub1"
-                    >
-                      ub1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1909,9 +1773,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ub2"
-                    >
-                      ub2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1920,9 +1782,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ub3"
-                    >
-                      ub3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1941,9 +1801,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ur1"
-                    >
-                      ur1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1952,9 +1810,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ur2"
-                    >
-                      ur2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1963,9 +1819,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ur3"
-                    >
-                      ur3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -1984,9 +1838,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ul1"
-                    >
-                      ul1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -1995,9 +1847,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ul2"
-                    >
-                      ul2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2006,9 +1856,7 @@ const MainGame = () => {
                         topBoxesRef.current.push(el)
                       }
                       data-position="ul3"
-                    >
-                      ul3
-                    </span>
+                    ></span>
                   </div>
                 </div>
 
@@ -2029,9 +1877,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mf1"
-                    >
-                      mf1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2040,9 +1886,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mf2"
-                    >
-                      mf2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2051,9 +1895,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mf3"
-                    >
-                      mf3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -2072,9 +1914,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mb1"
-                    >
-                      mb1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2083,9 +1923,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mb2"
-                    >
-                      mb2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2094,9 +1932,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mb3"
-                    >
-                      mb3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -2115,9 +1951,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mr1"
-                    >
-                      mr1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2126,9 +1960,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mr2"
-                    >
-                      mr2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2137,9 +1969,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="mr3"
-                    >
-                      mr3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -2158,9 +1988,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="ml1"
-                    >
-                      ml1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2169,9 +1997,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="ml2"
-                    >
-                      ml2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2180,9 +2006,7 @@ const MainGame = () => {
                         midBoxesRef.current.push(el)
                       }
                       data-position="ml3"
-                    >
-                      ml3
-                    </span>
+                    ></span>
                   </div>
                 </div>
 
@@ -2203,9 +2027,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbl1"
-                    >
-                      dbl1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2214,9 +2036,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbc1"
-                    >
-                      dbc1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2225,9 +2045,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbr1"
-                    >
-                      dbr1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2236,9 +2054,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbl2"
-                    >
-                      dbl2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2247,9 +2063,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbc2"
-                    >
-                      dbc2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2258,9 +2072,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbr2"
-                    >
-                      dbr2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2269,9 +2081,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbl3"
-                    >
-                      dbl3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2280,9 +2090,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbc3"
-                    >
-                      dbc3
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2291,9 +2099,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dbr3"
-                    >
-                      dbr3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -2312,9 +2118,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="df1"
-                    >
-                      df1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2323,9 +2127,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="df2"
-                    >
-                      df2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2334,9 +2136,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="df3"
-                    >
-                      df3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -2355,9 +2155,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="db1"
-                    >
-                      db1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2366,9 +2164,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="db2"
-                    >
-                      db2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2377,9 +2173,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="db3"
-                    >
-                      db3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -2398,9 +2192,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dr1"
-                    >
-                      dr1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2409,9 +2201,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dr2"
-                    >
-                      dr2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2420,9 +2210,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dr3"
-                    >
-                      dr3
-                    </span>
+                    ></span>
                   </div>
 
                   <div
@@ -2441,9 +2229,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dl1"
-                    >
-                      dl1
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2452,9 +2238,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dl2"
-                    >
-                      dl2
-                    </span>
+                    ></span>
                     <span
                       className="box"
                       ref={(el) =>
@@ -2463,9 +2247,7 @@ const MainGame = () => {
                         bottomBoxesRef.current.push(el)
                       }
                       data-position="dl3"
-                    >
-                      dl3
-                    </span>
+                    ></span>
                   </div>
                 </div>
               </div>
@@ -2487,7 +2269,6 @@ const MainGame = () => {
 
 const GameForm = () => {
   const { setOpenModal, isNew, isContinue } = useCubeContext();
-  // const { pathname } = useLocation();
 
   useEffect(() => {
     if (isNew || isContinue) {

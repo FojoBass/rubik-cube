@@ -63,8 +63,6 @@ export const getGameInfo = createAsyncThunk<
       gameInfo = doc.data();
     });
 
-    console.log({ gameInfo });
-
     return gameInfo
       ? ({
           ...gameInfo,

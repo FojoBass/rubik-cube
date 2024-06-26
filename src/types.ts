@@ -27,6 +27,7 @@ export enum ModalKeys {
   set = "settings",
   setsou = "set_sound",
   setcon = "set_controls",
+  tips = "tips",
 }
 
 export enum ConfirmKeys {
