@@ -41,7 +41,7 @@ const MainGame = () => {
   const {
     playerInfo,
     saving,
-    error,
+    // error,
     fetchingGameFailed,
     fetchingGameSuccess,
     fetchingPlayerFailed,
