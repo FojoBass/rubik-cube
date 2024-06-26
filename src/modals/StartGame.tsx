@@ -83,6 +83,8 @@ const StartGame = () => {
     const srcInd = (el.children[0] as HTMLImageElement).src.indexOf("src");
     const src = (el.children[0] as HTMLImageElement).src.slice(srcInd);
 
+    console.log(src);
+
     setAviUrl(src);
   };
 
