@@ -31,9 +31,10 @@ export const useRecon = ({
     if (el) {
       const color = getComputedStyle(el).getPropertyValue("--box_clr");
       updateEl.style.setProperty("--box_clr", color);
-    } else {
-      console.error("There is no element with the position: ", pos);
     }
+    // else {
+    //   console.error("There is no element with the position: ", pos);
+    // }
   };
 
   const updatePosition = (el: HTMLElement, newPos: string) => {
@@ -396,7 +397,7 @@ export const useRecon = ({
         });
         break;
       default:
-        console.error("There is a bug here");
+        // console.error("There is a bug here");
         return;
     }
   };
@@ -590,7 +591,7 @@ export const useRecon = ({
                   updatePosition(el, isClock ? "rsd1" : "rsu3");
                   break;
                 default:
-                  console.error("There is a bug here: ", position);
+                  // console.error("There is a bug here: ", position);
                   return;
               }
             });
@@ -665,7 +666,7 @@ export const useRecon = ({
                   updatePosition(el, isClock ? "ub3" : "uf1");
                   break;
                 default:
-                  console.error("There is a bug here");
+                  // console.error("There is a bug here");
                   return;
               }
             });
@@ -738,13 +739,13 @@ export const useRecon = ({
                   updatePosition(el, isClock ? "db3" : "df1");
                   break;
                 default:
-                  console.error("There is a bug here: ", position);
+                  // console.error("There is a bug here: ", position);
                   return;
               }
             });
             break;
           default:
-            console.error("There is a bug here");
+            // console.error("There is a bug here");
             return;
         }
 
@@ -783,7 +784,7 @@ export const useRecon = ({
             reconcileColors(CubeEnum.b, tempBottomBoxesEls, vertBoxesEls);
             break;
           default:
-            console.error("There is a bug here");
+            // console.error("There is a bug here");
             return;
         }
 

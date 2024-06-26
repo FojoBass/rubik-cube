@@ -8,10 +8,7 @@ export const store = configureStore({
   },
   middleware: (getDefaultMiddleware) =>
     getDefaultMiddleware({
-      serializableCheck: {
-        ignoredPaths: ["cube.error.payload"],
-        ignoredActions: ["createPlayer/fulfilled", "getPlayer/rejected"],
-      },
+      serializableCheck: false,
     }),
 });
 

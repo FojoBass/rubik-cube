@@ -80,7 +80,10 @@ const StartGame = () => {
       el.classList.remove("selected");
     });
     el.classList.add("selected");
-    const srcInd = (el.children[0] as HTMLImageElement).src.indexOf("src");
+    const origSrc = (el.children[0] as HTMLImageElement).src;
+    const srcInd = origSrc.includes("src")
+      ? origSrc.indexOf("src")
+      : origSrc.indexOf("assests");
     const src = (el.children[0] as HTMLImageElement).src.slice(srcInd);
 
     console.log(src, srcInd, el.children[0]);
@@ -126,7 +129,7 @@ const StartGame = () => {
       dispatch(resetInitializedSuccess());
     }
     if (isInitializeFailed) {
-      console.error(error);
+      // console.error(error);
       if (error.payload.message.includes("player info"))
         setErrMsg("Invalid Player id");
       else setErrMsg("initialization failed! Try again");

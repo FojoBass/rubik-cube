@@ -30,7 +30,7 @@ const PauseGame = () => {
           setOpenModal((prev) => ({ ...prev, key: ModalKeys.set }));
         break;
       default:
-        console.error(`${text} not found`);
+        // console.error(`${text} not found`);
         return;
     }
   };

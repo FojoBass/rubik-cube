@@ -82,7 +82,7 @@ const BtnControls: FC<BtnControlsInt> = ({
               showCube("h");
               break;
             default:
-              console.error(`Direction ${dir} not found`);
+              // console.error(`Direction ${dir} not found`);
               return;
           }
         };

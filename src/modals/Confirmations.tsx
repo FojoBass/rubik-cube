@@ -27,7 +27,7 @@ const Confirmations = () => {
         dispatch(resetNoActiveGame());
         break;
       default:
-        console.error(`${confirmTarget} not valid`);
+        // console.error(`${confirmTarget} not valid`);
         return;
     }
 
@@ -48,7 +48,7 @@ const Confirmations = () => {
         navigate("/");
         break;
       default:
-        console.error(`${confirmTarget} not valid`);
+        // console.error(`${confirmTarget} not valid`);
         return;
     }
   };

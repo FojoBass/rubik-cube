@@ -24,7 +24,7 @@ const Settings = () => {
           setOpenModal((prev) => ({ ...prev, key: ModalKeys.setcon }));
         break;
       default:
-        console.error(`${text} not found`);
+        // console.error(`${text} not found`);
         return;
     }
   };

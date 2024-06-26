@@ -82,7 +82,8 @@ const SwipeControls: FC<SwipeControlsInt> = ({
       } else if (position === "bottom") {
         showCube("h");
         cube.current = CubeEnum.b;
-      } else console.error("Bug here!");
+      }
+      // else console.error("Bug here!");
 
       isDown.current = 1;
       iniX.current = e.clientX;
@@ -138,7 +139,8 @@ const SwipeControls: FC<SwipeControlsInt> = ({
           if (remAngle(bottomCubeAngle.current) >= 90) isDown.current = 2;
           break;
         default:
-          console.error(`${cub} not found!`);
+          // console.error(`${cub} not found!`);
+          return;
       }
     }
   };
@@ -204,7 +206,8 @@ const SwipeControls: FC<SwipeControlsInt> = ({
           }
           break;
         default:
-          console.error(`${cube.current} not found!`);
+          // console.error(`${cube.current} not found!`);
+          return;
       }
     }
   };

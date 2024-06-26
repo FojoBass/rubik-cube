@@ -339,11 +339,12 @@ const MainGame = () => {
       const el = els.find((e) => e.dataset.position === cb.position);
       if (el) {
         el.style.setProperty("--box_clr", cb.color);
-      } else {
-        console.error(
-          `This position ${cb.position} was not found in any element ${els} `
-        );
       }
+      // else {
+      //   console.error(
+      //     `This position ${cb.position} was not found in any element ${els} `
+      //   );
+      // }
     });
   };
 
@@ -428,7 +429,7 @@ const MainGame = () => {
           }
           break;
         default:
-          console.error("There is a bug here");
+          // console.error("There is a bug here");
           return;
       }
 
@@ -552,7 +553,7 @@ const MainGame = () => {
       dispatch(resetFetchingPlayerFailed());
       dispatch(resetInitializedFailed());
 
-      console.error(error);
+      // console.error(error);
     }
   }, [fetchingPlayerFailed, fetchingPlayerSuccess, playerInfo]);
 
@@ -569,7 +570,7 @@ const MainGame = () => {
       setGameLoading(false);
       setIsLoadingFailed(true);
       dispatch(resetFetchingGameFailed());
-      console.error(error);
+      // console.error(error);
     }
   }, [gameInfo, fetchingGameFailed, fetchingGameSuccess, noActiveGame]);
 
@@ -691,7 +692,7 @@ const MainGame = () => {
           handleViewChange(swipeEl, 20, 20);
           break;
         default:
-          console.error("That is impossible!");
+          // console.error("That is impossible!");
           return;
       }
     }
