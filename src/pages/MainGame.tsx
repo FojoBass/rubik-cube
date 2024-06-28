@@ -35,7 +35,7 @@ import SwipeControls from "../components/SwipeControls";
 import { TbRotate3D } from "react-icons/tb";
 import GameComplete from "../modals/GameComplete";
 
-const randomizerCount = 20;
+const randomizerCount = 1;
 
 const MainGame = () => {
   const {
